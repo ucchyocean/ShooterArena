@@ -19,6 +19,24 @@ public class SAConfig {
     /** デフォルトで使用するワールド */
     public static String defaultWorldName;
 
+    /** Shooterのパワーレベル */
+    public static int shooterPower;
+
+    /** Shooterを一回打つのに必要なexpコスト */
+    public static int shooterCost;
+
+    /** ステージ開始時に配布するexp */
+    public static int giveExp;
+
+    /** 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうか */
+    public static boolean reviveExp;
+
+    /** 燃料切れになってから何秒で再燃料が提供されるか */
+    public static int reviveExpSeconds;
+
+    /** 燃料切れになってから再提供される量 */
+    public static int reviveExpAmount;
+
     /** リスポーンしたときにプレイヤーを発射するかどうか */
     public static boolean catapultOnRespawn;
 
@@ -34,13 +52,19 @@ public class SAConfig {
 
         File configFile = new File(ShooterArena.instance.getDataFolder(), "config.yml");
         if ( !configFile.exists() ) {
-            Utility.copyFileFromJar(ShooterArena.getPluginJarFile(), configFile, "config.yml", false);
+            Utility.copyFileFromJar(ShooterArena.getPluginJarFile(), configFile, "config_ja.yml", false);
         }
 
         ShooterArena.instance.reloadConfig();
         FileConfiguration config = ShooterArena.instance.getConfig();
 
         defaultWorldName = config.getString("defaultWorldName", "world");
+        shooterPower = config.getInt("shooterPower", 5);
+        shooterCost = config.getInt("shooterCost", 10);
+        giveExp = config.getInt("giveExp", 1500);
+        reviveExp = config.getBoolean("reviveExp", true);
+        reviveExpSeconds = config.getInt("reviveExpSeconds", 15);
+        reviveExpAmount = config.getInt("reviveExpAmount", 100);
         catapultOnRespawn = config.getBoolean("catapultOnRespawn", true);
         catapultPower = config.getInt("catapultPower", 5);
     }

@@ -40,10 +40,16 @@ public class CustomItemUseListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
 
         Player player = event.getPlayer();
+        boolean isLeftClick = false;
 
-        // 左クリックイベントでなければ対象外
-        if ( event.getAction() != Action.LEFT_CLICK_AIR &&
-                event.getAction() != Action.LEFT_CLICK_BLOCK ) {
+        // 左クリックor右クリックイベントでなければ対象外
+        if ( event.getAction() == Action.LEFT_CLICK_AIR ||
+                event.getAction() == Action.LEFT_CLICK_BLOCK ) {
+            isLeftClick = true;
+        } else if ( event.getAction() == Action.RIGHT_CLICK_AIR ||
+                event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
+            isLeftClick = false;
+        } else {
             return;
         }
 
@@ -63,7 +69,11 @@ public class CustomItemUseListener implements Listener {
         // DisplayNameが一致するアイテムを探して、onUseを実行する
         for ( ICustomItem i : items ) {
             if ( displayName.equals(i.getDisplayName()) ) {
-                i.onUse(player);
+                if ( isLeftClick ) {
+                    i.onUseByLeftClick(player);
+                } else {
+                    i.onUseByRightClick(player);
+                }
                 event.setCancelled(true);
                 return;
             }

@@ -53,7 +53,7 @@ public enum GamePhase {
         case PREPARE:
             return "準備中";
         case MATCH_MAKING:
-            return "参加者募集中";
+            return "対戦メンバー募集中";
         case IN_GAME:
             return "対戦中";
         case CANCELED:

@@ -12,21 +12,6 @@ package com.github.ucchyocean.sa.game;
 public class MatchMode {
 
     /**
-     * @author ucchy
-     * ゲームタイプ
-     */
-    public enum Type {
-        /** n回死んだら負けのルール、個人戦 */
-        DEATH_MATCH,
-        /** n回死んだら負けのルール、チーム戦 */
-        TEAM_DEATH_MATCH,
-        /** リスポ無制限、時間制限ありの、個人戦 */
-        TIME_MATCH,
-        /** リスポ無制限、時間制限ありの、個人戦 */
-        TEAM_TIME_MATCH;
-    }
-
-    /**
      * 制限時間（分）、無制限の場合は -1 であることに注意
      */
     public int minute;
@@ -39,6 +24,6 @@ public class MatchMode {
     /**
      * ゲームタイプ
      */
-    public Type type;
+    public GameType type;
 
 }

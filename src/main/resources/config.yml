@@ -1,0 +1,15 @@
+# Shooter Arena v0.1.0
+# @author     ucchy
+# @license    GPLv3
+# @copyright  Copyright ucchy 2013
+
+
+defaultWorldName: world
+shooterPower: 5
+shooterCost: 10
+giveExp: 1500
+reviveExp: true
+reviveExpSeconds: 15
+reviveExpAmount: 100
+catapultOnRespawn: true
+catapultPower: 5

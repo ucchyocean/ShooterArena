@@ -11,7 +11,9 @@ commands:
     aliases: sa
     usage: |
            /<command> reload - config.ymlの再読み込みをします。
-           /<command> create (arena) - 選択領域を、arenaという名前でアリーナに登録します。
+           /<command> create (arena) - arenaという名前のアリーナを新規作成します。
+           /<command> setLounge - コマンドの実行場所をラウンジのリスポーンポイントに設定します。
+           /<command> setRespawn [(group)] - コマンド実行場所をアリーナのリスポーンポイントに設定します。
            /<command> sign - メンバー募集用のカンバンを作成します。
            /<command> remove [(arena)] - arenaという名前のアリーナを登録解除します。
            /<command> disable [(arena)] - arenaという名前のアリーナを準備中にします。

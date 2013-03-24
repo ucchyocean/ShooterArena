@@ -15,10 +15,16 @@ import org.bukkit.inventory.ItemStack;
 public interface ICustomItem {
 
     /**
-     * アイテムが使用されたときに呼び出されるメソッド
+     * 左クリックでアイテムが使用されたときに呼び出されるメソッド
      * @param player 使用者
      */
-    public void onUse(Player player);
+    public void onUseByLeftClick(Player player);
+
+    /**
+     * 右クリックでアイテムが使用されたときに呼び出されるメソッド
+     * @param player 使用者
+     */
+    public void onUseByRightClick(Player player);
 
     /**
      * アイテムを取得するメソッド

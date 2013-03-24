@@ -1,0 +1,31 @@
+# Shooter Arena v0.1.0
+# @author     ucchy
+# @license    GPLv3
+# @copyright  Copyright ucchy 2013
+
+# ShooterArenaで遊ぶワールドの、ワールド名を指定します。
+defaultWorldName: world
+
+# Shooterのパワーレベルを指定します。
+shooterPower: 5
+
+# Shooterを一回打つのに必要なexpコストを設定します。
+shooterCost: 10
+
+# ステージ開始時に配布するexpを設定します。
+giveExp: 1500
+
+# 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうかを設定します。
+reviveExp: true
+
+# reviveExp が true の場合、燃料切れになってから何秒で再燃料が提供されるかを設定します。
+reviveExpSeconds: 15
+
+# reviveExp が true の場合、再提供される量を設定します。
+reviveExpAmount: 100
+
+# リスポーン時に射出されるかどうかを設定します。
+catapultOnRespawn: true
+
+# catapultOnRespawn が true の場合、射出する速度を設定します。
+catapultPower: 5

@@ -12,9 +12,12 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.ucchyocean.sa.command.ShooterArenaCommand;
+import com.github.ucchyocean.sa.command.ShooterCommand;
 import com.github.ucchyocean.sa.item.ICustomItem;
 import com.github.ucchyocean.sa.item.Shooter;
 import com.github.ucchyocean.sa.listener.CustomItemUseListener;
+import com.github.ucchyocean.sa.listener.LoungeSignListener;
 
 /**
  * @author ucchy
@@ -33,8 +36,7 @@ public class ShooterArena extends JavaPlugin {
 
         instance = this;
 
-        initializeCustomItems();
-
+        // WorldGuard の読み込み
         wghandler = new WorldGuardHandler();
         if ( !wghandler.loadWorldGuard(getServer()) ) {
             getLogger().warning("WorldGuard がロードされていません。");
@@ -42,6 +44,19 @@ public class ShooterArena extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        // 設定の読み込み
+        SAConfig.reloadConfig();
+
+        // カスタムアイテムの初期化
+        initializeCustomItems();
+
+        // リスナーの登録
+        getServer().getPluginManager().registerEvents(new LoungeSignListener(), this);
+
+        // コマンドの登録
+        getCommand("ShooterArena").setExecutor(new ShooterArenaCommand());
+        getCommand("Shooter").setExecutor(new ShooterCommand());
     }
 
     /**

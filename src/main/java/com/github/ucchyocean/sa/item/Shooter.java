@@ -68,21 +68,28 @@ public class Shooter implements ICustomItem {
     }
 
     /**
-     * @see com.github.ucchyocean.sa.item.ICustomItem#onUse(org.bukkit.entity.Player)
+     * @see com.github.ucchyocean.sa.item.ICustomItem#onUseByLeftClick(org.bukkit.entity.Player)
      */
-    public void onUse(Player player) {
+    public void onUseByLeftClick(Player player) {
+
+        Material target = player.getTargetBlock(null, 100).getType();
 
         // クリックが有効範囲かを調べる
-        if ( player.getTargetBlock(null, 100).getType() == Material.AIR ) {
+        if ( target == Material.AIR ) {
+            player.sendMessage(ChatColor.RED + "Out of range!!");
+            return;
+        }
 
-            player.sendMessage(ChatColor.RED + "out of range!!");
+        // ガラスにはフックできない
+        if ( target == Material.GLASS || target == Material.THIN_GLASS ) {
+            player.sendMessage(ChatColor.RED + "Cannot hook to glass!!");
             return;
         }
 
         // 燃料不足かどうかを調べる
         if ( !PlayerExpHandler.hasExperience(player, DEFAULT_COST) ) {
-
-            player.sendMessage(ChatColor.RED + "no fuel!!");
+            player.sendMessage(ChatColor.RED + "No fuel!!");
+            // TODO: あと何秒で燃料切れから回復するのかを設定する
             return;
         }
 
@@ -104,6 +111,13 @@ public class Shooter implements ICustomItem {
                 Effect.POTION_BREAK, 21);
         player.playEffect(player.getEyeLocation().add(0.5D, 0.0D, 0.5D),
                 Effect.POTION_BREAK, 21);
+    }
+
+    /**
+     * @see com.github.ucchyocean.sa.item.ICustomItem#onUseByRightClick(org.bukkit.entity.Player)
+     */
+    public void onUseByRightClick(Player player) {
+        // 右クリックでは何も処理をしない
     }
 
     /**
