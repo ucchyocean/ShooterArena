@@ -1,0 +1,41 @@
+name: ShooterArena
+main: com.github.ucchyocean.sa.ShooterArena
+version: 0.1.0
+author: ucchy
+description: Shooterを使ったPVPを管理するためのアリーナプラグイン
+depend: [WorldGuard]
+softdepend: [WorldEdit]
+commands:
+  shooterarena:
+    description: ShooterArenaの管理コマンド
+    aliases: sa
+    usage: |
+           /<command> reload - config.ymlの再読み込みをします。
+           /<command> create (arena) - 選択領域を、arenaという名前でアリーナに登録します。
+           /<command> sign - メンバー募集用のカンバンを作成します。
+           /<command> remove [(arena)] - arenaという名前のアリーナを登録解除します。
+           /<command> disable [(arena)] - arenaという名前のアリーナを準備中にします。
+           /<command> disable force [(arena)] - arenaという名前のアリーナを強制的に準備中にします。
+           /<command> enable [(arena)] - arenaという名前のアリーナを使用可にします。
+           /<command> list - 全アリーナのリストを表示します。
+           /<command> setGame [(arena)] (type) (amount) - アリーナのゲームを、typeに設定します。
+           /<command> goto (arena) [(group)] - アリーナのリスポーンポイントへテレポートします。
+    permission: shooterarena.admin
+    permission-message: パーミッション "<permission>" が無いため、実行できません。
+  shooter:
+    description: Shooterのコマンド
+    aliases: sh
+    usage: |
+           /<command> rank [NumberOfView] - ポイントランキングを表示します。
+           /<command> start - ゲームをスタートします。
+           /<command> listen (game name) - 対象のゲームに観客として参加します。
+           /<command> leave - 観客として参加しているゲームから退出します。
+    permission: shooterarena.shooter
+    permission-message: パーミッション "<permission>" が無いため、実行できません。
+permissions:
+  shooterarena.admin:
+    description: ShooterArenaコマンドの使用権限
+    default: op
+  shooterarena.shooter:
+    description: shooterコマンドの使用権限
+    default: true
