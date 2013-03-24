@@ -12,9 +12,6 @@ shooterPower: 5
 # Shooterを一回打つのに必要なexpコストを設定します。
 shooterCost: 10
 
-# ステージ開始時に配布するexpを設定します。
-giveExp: 1500
-
 # 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうかを設定します。
 reviveExp: true
 
@@ -29,3 +26,14 @@ catapultOnRespawn: true
 
 # catapultOnRespawn が true の場合、射出する速度を設定します。
 catapultPower: 5
+
+# ゲーム開始時の配布設定
+kits:
+  # ゲーム開始時に配布するexpを設定します。
+  giveExp: 1500
+
+  # ゲーム開始時に配布するアイテムを設定します。
+  items: ''
+
+  # ゲーム開始時に配布する防具を設定します。
+  armors: ''

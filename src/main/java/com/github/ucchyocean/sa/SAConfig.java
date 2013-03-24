@@ -25,9 +25,6 @@ public class SAConfig {
     /** Shooterを一回打つのに必要なexpコスト */
     public static int shooterCost;
 
-    /** ステージ開始時に配布するexp */
-    public static int giveExp;
-
     /** 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうか */
     public static boolean reviveExp;
 
@@ -42,6 +39,15 @@ public class SAConfig {
 
     /** 発射する場合、その威力 */
     public static int catapultPower;
+
+    /** ゲーム開始時に配布するexp */
+    public static int kitsExp;
+
+    /** ゲーム開始時に配布するキット */
+    public static String kitsItems;
+
+    /** ゲーム開始時に配布する防具 */
+    public static String kitsArmors;
 
     /**
      * config.ymlの読み出し処理。
@@ -61,12 +67,14 @@ public class SAConfig {
         defaultWorldName = config.getString("defaultWorldName", "world");
         shooterPower = config.getInt("shooterPower", 5);
         shooterCost = config.getInt("shooterCost", 10);
-        giveExp = config.getInt("giveExp", 1500);
         reviveExp = config.getBoolean("reviveExp", true);
         reviveExpSeconds = config.getInt("reviveExpSeconds", 15);
         reviveExpAmount = config.getInt("reviveExpAmount", 100);
         catapultOnRespawn = config.getBoolean("catapultOnRespawn", true);
         catapultPower = config.getInt("catapultPower", 5);
+        kitsExp = config.getInt("kits.exp", 1500);
+        kitsItems = config.getString("kits.items", "");
+        kitsArmors = config.getString("kits.armors", "");
     }
 
     /**
