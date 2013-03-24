@@ -1,4 +1,6 @@
-BattlePoints
+ShooterArena
 ============
 
-The point system of 1 on 1 PVP Battle for CraftBukkit.
+Shooter Arena plugin for CraftBukkit.
+
+http://www53.atwiki.jp/mc-shooter/pages/17.html
