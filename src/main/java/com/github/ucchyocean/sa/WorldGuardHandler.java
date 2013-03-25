@@ -3,6 +3,8 @@
  */
 package com.github.ucchyocean.sa;
 
+import java.util.ArrayList;
+
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -62,5 +64,23 @@ public class WorldGuardHandler {
             }
         }
         return false;
+    }
+
+    /**
+     * 指定の地点が、指定の名前の領域に含まれているかどうかを確認し、
+     * 含まれているならその名前を返す
+     * @param location 地点
+     * @param names 領域名
+     * @return 該当した領域名 該当しない場合はnull
+     */
+    public String getRegionNameFromLocation(Location location, ArrayList<String> names) {
+        RegionManager manager = wg.getRegionManager(location.getWorld());
+        ApplicableRegionSet regions = manager.getApplicableRegions(location);
+        for ( ProtectedRegion region : regions ) {
+            if ( names.contains(region.getId()) ) {
+                return region.getId();
+            }
+        }
+        return null;
     }
 }

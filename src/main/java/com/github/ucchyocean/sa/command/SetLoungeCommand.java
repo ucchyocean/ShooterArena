@@ -5,7 +5,12 @@
  */
 package com.github.ucchyocean.sa.command;
 
+import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import com.github.ucchyocean.sa.ShooterArena;
+import com.github.ucchyocean.sa.arena.ArenaManager;
 
 /**
  * @author ucchy
@@ -26,8 +31,32 @@ public class SetLoungeCommand extends CommandAbst {
      */
     @Override
     public boolean doCommand(CommandSender sender, String[] args) {
-        // TODO 自動生成されたメソッド・スタブ
-        return false;
+
+        if ( !(sender instanceof Player) ) {
+            sender.sendMessage(PREERR + "このコマンドはゲーム内でのみ実行可能です。");
+            return true;
+        }
+
+        Player player = (Player)sender;
+
+        if ( !ShooterArena.wghandler.existRegion(player.getWorld(), "lounge") ) {
+            sender.sendMessage(PREERR + "領域loungeが登録されていません。");
+            return true;
+        }
+
+        Location location = player.getLocation();
+
+        if ( !ShooterArena.wghandler.insideRegion(location, "lounge") ) {
+            sender.sendMessage(PREERR + "領域loungeの外なので、設定できません。");
+            return true;
+        }
+
+        // ラウンジリスポーンを登録
+        ArenaManager.setLoungeRespawn(location);
+        sender.sendMessage(PREINFO + "ラウンジリスポーンポイントを、" +
+                getBlockPointDesc(location) + "に設定しました。");
+
+        return true;
     }
 
 }

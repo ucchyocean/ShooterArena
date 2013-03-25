@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+
+import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -167,5 +169,16 @@ public class ArenaSign {
      */
     public void onHit(Player player) {
         // TODO:
+    }
+
+    public void remove() {
+
+        for ( int i=0; i<4; i++ )
+            main.setLine(i, "");
+        main.update();
+
+        for ( int i=0; i<4; i++ )
+            sub.setLine(i, "");
+        sub.update();
     }
 }

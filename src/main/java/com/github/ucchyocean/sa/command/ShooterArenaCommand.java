@@ -6,6 +6,7 @@
 package com.github.ucchyocean.sa.command;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,6 +17,12 @@ import org.bukkit.command.CommandSender;
  * ShooterArenaのコマンドクラス
  */
 public class ShooterArenaCommand implements CommandExecutor {
+
+
+    private static Hashtable<String, String> commandCache;
+    static {
+        commandCache = new Hashtable<String, String>();
+    }
 
     private ArrayList<CommandAbst> commands;
 
@@ -31,7 +38,6 @@ public class ShooterArenaCommand implements CommandExecutor {
         commands.add(new SignCommand());
         commands.add(new RemoveCommand());
         commands.add(new DisableCommand());
-        commands.add(new EnableCommand());
         commands.add(new ListCommand());
         commands.add(new SetGameCommand());
         commands.add(new GotoCommand());
@@ -59,4 +65,16 @@ public class ShooterArenaCommand implements CommandExecutor {
         return false;
     }
 
+    public static void setPlayerCommandCache(String name, String kind) {
+        commandCache.put(name, kind);
+    }
+
+    public static void removePlayerCommandCache(String name) {
+        if ( commandCache.containsKey(name) )
+            commandCache.remove(name);
+    }
+
+    public static String getPlayerCommandCache(String name) {
+        return commandCache.get(name);
+    }
 }

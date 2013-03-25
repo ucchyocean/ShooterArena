@@ -7,6 +7,8 @@ package com.github.ucchyocean.sa.command;
 
 import org.bukkit.command.CommandSender;
 
+import com.github.ucchyocean.sa.SAConfig;
+
 
 /**
  * @author ucchy
@@ -27,8 +29,8 @@ public class ReloadCommand extends CommandAbst {
      */
     @Override
     public boolean doCommand(CommandSender sender, String[] args) {
-        // TODO 自動生成されたメソッド・スタブ
-        return false;
+        SAConfig.reloadConfig();
+        return true;
     }
 
 }

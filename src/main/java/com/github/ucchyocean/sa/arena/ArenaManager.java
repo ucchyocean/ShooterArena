@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -24,10 +25,14 @@ public class ArenaManager {
 
     private static Hashtable<String, Arena> arenas;
     private static Hashtable<String, SAGameSession> sessions;
+    private static Location loungeRespawn;
+    private static Hashtable<String, Location> arenaRespawn;
     static {
         arenas = new Hashtable<String, Arena>();
         sessions = new Hashtable<String, SAGameSession>();
+        arenaRespawn = new Hashtable<String, Location>();
     }
+
 
     /**
      * 既に存在するアリーナ名かどうかを確認する
@@ -72,10 +77,45 @@ public class ArenaManager {
     }
 
     /**
+     * アリーナ名のリストを取得する
+     * @return アリーナ名のリスト
+     */
+    public static ArrayList<String> getArenaNames() {
+        ArrayList<String> result = new ArrayList<String>();
+        Enumeration<String> keys = arenas.keys();
+        while ( keys.hasMoreElements() ) {
+            String key = keys.nextElement();
+            result.add(key);
+        }
+        return result;
+    }
+
+    public static Arena getArenaByLocation(Location location) {
+        String regionName =
+                ShooterArena.wghandler.getRegionNameFromLocation(
+                        location, ArenaManager.getArenaNames() );
+        if ( regionName == null ) {
+            return null;
+        } else {
+            return arenas.get(regionName);
+        }
+    }
+
+    /**
+     * アリーナを削除する
+     * @param name アリーナ名
+     */
+    public static void removeArena(String name) {
+        if ( arenas.containsKey(name) ) {
+            arenas.remove(name);
+        }
+    }
+
+    /**
      * アリーナのリストを取得する
      * @return アリーナのリスト
      */
-    public ArrayList<String> getArenaList() {
+    public static ArrayList<String> getArenaList() {
 
         ArrayList<String> result = new ArrayList<String>();
 
@@ -99,7 +139,7 @@ public class ArenaManager {
      * @return 新しいゲームセッション
      */
     public static SAGameSession createNewGameSession(Arena arena) {
-        SAGameSession session = new SAGameSession(arena.getName(), arena);
+        SAGameSession session = new SAGameSession(arena);
         sessions.put(arena.getName(), session);
         return session;
     }
@@ -150,6 +190,10 @@ public class ArenaManager {
         return null;
     }
 
+    /**
+     * 全てのArenaSignを返す
+     * @return 全てのArenaSign
+     */
     public static ArrayList<ArenaSign> getAllArenaSign() {
         ArrayList<ArenaSign> signs = new ArrayList<ArenaSign>();
         Enumeration<String> keys = arenas.keys();
@@ -161,5 +205,39 @@ public class ArenaManager {
             }
         }
         return signs;
+    }
+
+    /**
+     * ラウンジリスポーンポイントを設定します。
+     * @param location
+     */
+    public static void setLoungeRespawn(Location location) {
+        loungeRespawn = location;
+    }
+
+    /**
+     * ラウンジリスポーンポイントを取得します。
+     * @return ラウンジリスポーンポイント
+     */
+    public static Location getLoungeRespawn() {
+        return loungeRespawn;
+    }
+
+    /**
+     * アリーナリスポーンポイントを設定します。
+     * @param name リスポーンポイント名
+     * @param location リスポーンポイント
+     */
+    public static void setArenaRespawn(String name, Location location) {
+        arenaRespawn.put(name, location);
+    }
+
+    /**
+     * アリーナリスポーンポイントを取得します。
+     * @param name リスポーンポイント名
+     * @return リスポーンポイント
+     */
+    public static Location getArenaRespawn(String name) {
+        return arenaRespawn.get(name);
     }
 }

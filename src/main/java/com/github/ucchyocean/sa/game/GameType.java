@@ -37,6 +37,16 @@ public enum GameType {
         return id;
     }
 
+    public static GameType fromString(String id) {
+        GameType[] values = values();
+        for ( GameType value : values ) {
+            if ( value.toString().equalsIgnoreCase(id) ) {
+                return value;
+            }
+        }
+        return null;
+    }
+
     /**
      * 日本語表記を返す
      * @return 日本語表記

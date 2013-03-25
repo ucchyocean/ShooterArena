@@ -81,4 +81,14 @@ public class Arena {
     public MatchMode getMode() {
         return mode;
     }
+
+    /**
+     * アリーナを準備中に変更します。
+     */
+    public void setDisable() {
+        setMode(null);
+        if ( sign != null ) {
+            sign.setPrepare();
+        }
+    }
 }

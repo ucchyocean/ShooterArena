@@ -15,12 +15,11 @@ commands:
            /<command> setLounge - コマンドの実行場所をラウンジのリスポーンポイントに設定します。
            /<command> setRespawn [(group)] - コマンド実行場所をアリーナのリスポーンポイントに設定します。
            /<command> sign - メンバー募集用のカンバンを作成します。
-           /<command> remove [(arena)] - arenaという名前のアリーナを登録解除します。
-           /<command> disable [(arena)] - arenaという名前のアリーナを準備中にします。
-           /<command> disable force [(arena)] - arenaという名前のアリーナを強制的に準備中にします。
-           /<command> enable [(arena)] - arenaという名前のアリーナを使用可にします。
+           /<command> remove (arena) - arenaという名前のアリーナを登録解除します。
+           /<command> disable (arena) - arenaという名前のアリーナを準備中にします。
+           /<command> disable force (arena) - arenaという名前のアリーナを強制的に準備中にします。
            /<command> list - 全アリーナのリストを表示します。
-           /<command> setGame [(arena)] (type) (amount) - アリーナのゲームを、typeに設定します。
+           /<command> setGame (arena) (type) (amount) - アリーナのゲームを、typeに設定します。
            /<command> goto (arena) [(group)] - アリーナのリスポーンポイントへテレポートします。
     permission: shooterarena.admin
     permission-message: パーミッション "<permission>" が無いため、実行できません。

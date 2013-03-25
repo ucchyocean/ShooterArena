@@ -5,13 +5,20 @@
  */
 package com.github.ucchyocean.sa.command;
 
+import java.util.ArrayList;
+
 import org.bukkit.command.CommandSender;
+
+import com.github.ucchyocean.sa.arena.ArenaManager;
 
 /**
  * @author ucchy
  *
  */
 public class ListCommand extends CommandAbst {
+
+    private static final String INFORMATION_HEADER =
+            "========== Arena List ==========";
 
     /**
      * @see com.github.ucchyocean.sa.command.CommandAbst#getCommand()
@@ -26,8 +33,15 @@ public class ListCommand extends CommandAbst {
      */
     @Override
     public boolean doCommand(CommandSender sender, String[] args) {
-        // TODO 自動生成されたメソッド・スタブ
-        return false;
+
+        ArrayList<String> list = ArenaManager.getArenaList();
+
+        sender.sendMessage(PREINFO + INFORMATION_HEADER);
+        for ( String l : list ) {
+            sender.sendMessage(PREINFO + l);
+        }
+
+        return true;
     }
 
 }

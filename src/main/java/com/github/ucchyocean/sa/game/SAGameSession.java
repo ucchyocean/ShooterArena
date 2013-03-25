@@ -40,13 +40,15 @@ public class SAGameSession {
     /**
      * コンストラクタ
      */
-    public SAGameSession(String gameName, Arena arena) {
+    public SAGameSession(Arena arena) {
         this.players = new ArrayList<String>();
         this.listeners = new ArrayList<String>();
         this.mode = arena.getMode();
         this.phase = GamePhase.PREPARE;
-        this.logger = new SAGameLogger(gameName);
+        this.logger = new SAGameLogger(arena.getName());
         this.arena = arena;
+
+        arena.setSession(this);
 
         runPreparePhase();
     }
