@@ -19,11 +19,17 @@ import com.github.ucchyocean.sa.arena.Arena;
  */
 public class SAGameSession {
 
+    /** アナウンスメッセージフォーマット */
+    private static final String FORMAT_ANNOUNCE = ChatColor.GREEN + "[%s] %s";
+
     /** 参加プレイヤー */
     private ArrayList<String> players;
 
     /** 観客プレイヤー */
     private ArrayList<String> listeners;
+
+    /** リーダー */
+    private String leader;
 
     /** ゲームモード */
     public MatchMode mode;
@@ -40,49 +46,92 @@ public class SAGameSession {
     /**
      * コンストラクタ
      */
-    public SAGameSession(Arena arena) {
+    public SAGameSession(Arena arena, String leader) {
+
         this.players = new ArrayList<String>();
         this.listeners = new ArrayList<String>();
         this.mode = arena.getMode();
-        this.phase = GamePhase.PREPARE;
         this.logger = new SAGameLogger(arena.getName());
         this.arena = arena;
+        this.leader = leader;
 
         arena.setSession(this);
 
         runPreparePhase();
     }
 
+    /**
+     * セッションを準備中にする
+     */
     public void runPreparePhase() {
-        // TODO:
-    }
 
+        logger.write("アリーナ " + arena.getName() + " で、新規ゲームセッションが作成されました。");
+        this.phase = GamePhase.PREPARE;
+
+        // そのまま募集中フェーズへ移行する
+        runMatchMakingPhase();
+   }
+
+    /**
+     * セッションを対戦メンバー募集中にする
+     */
     public void runMatchMakingPhase() {
-        // TODO:
+
+        logger.write("アリーナ " + arena.getName() + " が、対戦メンバー募集中になりました。");
+        logger.write("ゲームモードは、" + arena.getMode().toJapanese() + " です。");
+        this.phase = GamePhase.MATCH_MAKING;
+        refreshArenaSign();
     }
 
+    /**
+     * セッションを対戦中にする
+     */
     public void startGame() {
         // TODO:
     }
 
+    /**
+     * セッションをキャンセルして終了する
+     */
     public void cancelGame() {
         // TODO:
     }
 
+    /**
+     * セッションを終了する
+     */
     public void endGame() {
         // TODO:
     }
 
+    /**
+     * セッションに参加しているプレイヤー名一覧を取得する
+     * @return プレイヤー名一覧
+     */
     public ArrayList<String> getPlayers() {
         return players;
     }
 
+    /**
+     * セッションに参加メンバーを追加する
+     * @param playerName 追加するプレイヤー名
+     */
     public void addPlayer(String playerName) {
+        logger.write(playerName + " さんが、ゲームセッションに参加しました。");
         players.add(playerName);
+        refreshArenaSign();
+
+        // TODO: 満員になったら、開始コマンドを実行するよう、リーダーにメッセージを送信する
     }
 
+    /**
+     * セッションから参加メンバーを離脱する
+     * @param playerName 離脱するプレイヤー名
+     */
     public void removePlayer(String playerName) {
+        logger.write(playerName + " さんが、ゲームセッションから離脱しました。");
         players.remove(playerName);
+        refreshArenaSign();
     }
 
     public ArrayList<String> getListeners() {
@@ -118,7 +167,8 @@ public class SAGameSession {
         for ( String name : players ) {
             Player player = ShooterArena.getPlayerExact(name);
             if ( player != null ) {
-                player.sendMessage(message); // TODO: メッセージに装飾が欲しい
+                String msg = String.format(FORMAT_ANNOUNCE, arena.getName(), message);
+                player.sendMessage(msg);
             }
         }
     }
@@ -128,7 +178,8 @@ public class SAGameSession {
         for ( String name : listeners ) {
             Player player = ShooterArena.getPlayerExact(name);
             if ( player != null ) {
-                player.sendMessage(message); // TODO: メッセージに装飾が欲しい
+                String msg = String.format(FORMAT_ANNOUNCE, arena.getName(), message);
+                player.sendMessage(msg);
             }
         }
     }

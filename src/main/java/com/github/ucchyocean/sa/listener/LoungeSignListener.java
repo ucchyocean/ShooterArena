@@ -51,13 +51,13 @@ public class LoungeSignListener implements Listener {
         Block target = player.getTargetBlock(null, 100);
 
         // クリック対象がカンバンでない場合は対象外
-        if ( target == null || target instanceof Sign ) {
+        if ( !isSign(target) ) {
             return;
         }
 
-        Sign s = (Sign)target;
-
+        Sign s = (Sign)target.getState();
         String arenaName = ShooterArenaCommand.getPlayerCommandCache(player.getName());
+
         if ( arenaName != null ) {
             // sa sign の実行者の処理
 
@@ -85,8 +85,8 @@ public class LoungeSignListener implements Listener {
             Block down = s.getBlock().getRelative(BlockFace.DOWN);
             Block up = s.getBlock().getRelative(BlockFace.UP);
 
-            boolean downIsValid = ( down.getType() == Material.SIGN && isEmptySign((Sign)down) );
-            boolean upIsValid = ( up.getType() == Material.SIGN && isEmptySign((Sign)up) );
+            boolean downIsValid = ( isSign(down) && isEmptySign((Sign)down.getState()) );
+            boolean upIsValid = ( isSign(up) && isEmptySign((Sign)up.getState()) );
 
             if ( !downIsValid && !upIsValid ) {
                 player.sendMessage(PREERR + "上にも下にも空の看板が無いため、登録できません。");
@@ -97,11 +97,11 @@ public class LoungeSignListener implements Listener {
             }
 
             if ( upIsValid ) {
-                main = (Sign)up;
+                main = (Sign)up.getState();
                 sub = s;
             } else {
                 main = s;
-                sub = (Sign)down;
+                sub = (Sign)down.getState();
             }
 
             // アリーナ取得
@@ -114,7 +114,9 @@ public class LoungeSignListener implements Listener {
             ArenaSign sign = new ArenaSign(arena, main, sub);
             arena.setSign(sign);
 
-            // TODO アリーナサインの更新
+            // アリーナサインの更新
+            sign.setPrepare();
+            sign.clearSub();
 
             player.sendMessage(PREINFO + "アリーナ看板を作成しました。");
             return;
@@ -143,5 +145,16 @@ public class LoungeSignListener implements Listener {
             }
         }
         return true;
+    }
+
+    private boolean isSign(Block block) {
+
+        if ( block == null ) {
+            return false;
+        }
+
+        return ( block.getType() == Material.SIGN ||
+                block.getType() == Material.SIGN_POST ||
+                block.getType() == Material.WALL_SIGN );
     }
 }

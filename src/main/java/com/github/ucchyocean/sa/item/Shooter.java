@@ -36,6 +36,7 @@ public class Shooter implements ICustomItem {
     private static final int DEFAULT_LEVEL = 6;
     private static final int DEFAULT_COST = 10;
     private static final int MAX_LEVEL = 15;
+    private static final int RANGE = 50;
 
     private ItemStack item;
 
@@ -72,7 +73,7 @@ public class Shooter implements ICustomItem {
      */
     public void onUseByLeftClick(Player player) {
 
-        Material target = player.getTargetBlock(null, 100).getType();
+        Material target = player.getTargetBlock(null, RANGE).getType();
 
         // クリックが有効範囲かを調べる
         if ( target == Material.AIR ) {

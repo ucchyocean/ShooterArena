@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-
-import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -19,10 +17,10 @@ import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 public class ArenaSign {
 
     private static final String[] MESSAGE_PREPARE = {
-        ChatColor.GRAY + "" + ChatColor.ITALIC +
+        ChatColor.DARK_AQUA + "" + ChatColor.ITALIC +
             "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.GRAY + "このアリーナは" + ChatColor.RESET,
-        ChatColor.GRAY + "準備中です。" + ChatColor.RESET,
+        ChatColor.DARK_AQUA + "このアリーナは" + ChatColor.RESET,
+        ChatColor.DARK_AQUA + "準備中です。" + ChatColor.RESET,
     };
 
     private static final String[] MESSAGE_MATCHING = {
@@ -36,7 +34,7 @@ public class ArenaSign {
         ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC +
             "%s" + ChatColor.RESET, // %s = ゲームタイプ
         ChatColor.DARK_PURPLE + "対戦準備中" + ChatColor.RESET,
-        ChatColor.RED + "<満員>" + ChatColor.RESET,
+        ChatColor.DARK_RED + "<満員>" + ChatColor.RESET,
     };
 
     private static final String[] MESSAGE_IN_GAME = {
@@ -76,10 +74,12 @@ public class ArenaSign {
      */
     public void setPrepare() {
 
+        String mode = "";
+        if ( parent.getMode() != null ) {
+            mode = parent.getMode().type.toJapanese();
+        }
         String title = String.format("[%s]", parent.getName());
-        String type = String.format(
-                MESSAGE_PREPARE[0],
-                parent.getMode().type.toJapanese());
+        String type = String.format(MESSAGE_PREPARE[0], mode);
         main.setLine(0, title);
         main.setLine(1, type);
         main.setLine(2, MESSAGE_PREPARE[1]);
@@ -168,9 +168,16 @@ public class ArenaSign {
      * @param player クリックしたプレイヤー
      */
     public void onHit(Player player) {
-        // TODO:
+
+
+        if ( parent.getSession() == null ) {
+
+        }
     }
 
+    /**
+     * 看板をArenaの登録から解除して、普通の看板にする。
+     */
     public void remove() {
 
         for ( int i=0; i<4; i++ )

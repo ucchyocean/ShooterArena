@@ -45,6 +45,11 @@ public class SignCommand extends CommandAbst {
         String name = args[1];
 
         if ( ShooterArenaCommand.getPlayerCommandCache(player.getName()) != null ) {
+            if ( name.equalsIgnoreCase("cancel") ) {
+                ShooterArenaCommand.removePlayerCommandCache(player.getName());
+                sender.sendMessage(PREINFO + "コマンドの実行待機をキャンセルしました。");
+                return true;
+            }
             sender.sendMessage(PREERR + "あなたは既に、コマンドの実行待機中です。");
             return true;
         }

@@ -138,8 +138,9 @@ public class ArenaManager {
      * @param arena ゲームを行うアリーナ
      * @return 新しいゲームセッション
      */
-    public static SAGameSession createNewGameSession(Arena arena) {
-        SAGameSession session = new SAGameSession(arena);
+    public static SAGameSession createNewGameSession(Arena arena, Player leader) {
+        SAGameSession session = new SAGameSession(arena, leader.getName());
+        session.addPlayer(leader.getName());
         sessions.put(arena.getName(), session);
         return session;
     }

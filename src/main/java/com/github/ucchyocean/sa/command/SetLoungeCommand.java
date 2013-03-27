@@ -53,6 +53,10 @@ public class SetLoungeCommand extends CommandAbst {
 
         // ラウンジリスポーンを登録
         ArenaManager.setLoungeRespawn(location);
+        // ワールドリスポーンを変更
+        player.getWorld().setSpawnLocation(
+                location.getBlockX(), location.getBlockY(), location.getBlockZ());
+
         sender.sendMessage(PREINFO + "ラウンジリスポーンポイントを、" +
                 getBlockPointDesc(location) + "に設定しました。");
 

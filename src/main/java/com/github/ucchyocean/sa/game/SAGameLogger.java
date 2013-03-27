@@ -20,7 +20,8 @@ public class SAGameLogger {
 
     private static String FILE_NAME_FORMAT = "%s-%s.log";
     private static File folder;
-    private static SimpleDateFormat format;
+    private static SimpleDateFormat formatForFileName;
+    private static SimpleDateFormat formatForLine;
 
     private File file;
 
@@ -32,7 +33,7 @@ public class SAGameLogger {
 
         file = new File(
                 String.format(FILE_NAME_FORMAT,
-                        gameName, format.format(new Date())));
+                        gameName, formatForFileName.format(new Date())));
     }
 
     /**
@@ -41,11 +42,13 @@ public class SAGameLogger {
      */
     public void write(String message) {
 
+        String date = formatForLine.format(new Date());
+
         BufferedWriter writer = null;
 
         try {
             writer = new BufferedWriter(new FileWriter(file));
-            writer.write(message);
+            writer.write(date + ", " + message);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +71,8 @@ public class SAGameLogger {
     public static void initialize(File saveFolder) {
 
         folder = saveFolder;
-        format = new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+        formatForFileName = new SimpleDateFormat("yyyyMMdd'-'HHmmss");
+        formatForLine = new SimpleDateFormat("yyyy-MM-dd','HH:mm:ss");
 
         if ( !folder.exists() ) {
             folder.mkdirs();
