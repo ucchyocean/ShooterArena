@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 import com.github.ucchyocean.sa.command.ShooterCommand;
 import com.github.ucchyocean.sa.game.SAGameLogger;
@@ -49,6 +50,9 @@ public class ShooterArena extends JavaPlugin {
         // 設定の読み込み
         SAConfig.reloadConfig();
 
+        // アリーナデータの読み込み
+        ArenaManager.load();
+
         // カスタムアイテムの初期化
         initializeCustomItems();
 
@@ -61,6 +65,15 @@ public class ShooterArena extends JavaPlugin {
         // コマンドの登録
         getCommand("ShooterArena").setExecutor(new ShooterArenaCommand());
         getCommand("Shooter").setExecutor(new ShooterCommand());
+    }
+
+    /**
+     * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
+     */
+    @Override
+    public void onDisable() {
+
+        // TODO 全てのGameSessionをキャンセルする
     }
 
     /**

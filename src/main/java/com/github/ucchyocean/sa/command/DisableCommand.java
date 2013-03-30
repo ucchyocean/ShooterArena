@@ -51,7 +51,7 @@ public class DisableCommand extends CommandAbst {
             return true;
         }
 
-        SAGameSession session = arena.getSession();
+        SAGameSession session = ArenaManager.getSession(arena.getName());
 
         if ( session != null ) {
             if ( !isForce ) {

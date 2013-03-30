@@ -16,6 +16,10 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 
 /**
  * @author ucchy
@@ -159,5 +163,76 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    /**
+     * Location を文字列表現に変換して返す
+     * @param location 変換対象
+     * @return 文字列表現
+     */
+    public static String convLocationToDesc(Location location) {
+
+        return String.format("%s_%d_%d_%d",
+                location.getWorld().getName(), location.getBlockX(),
+                location.getBlockY(), location.getBlockZ());
+    }
+
+    /**
+     * 文字列表現をLocationに変換して返す
+     * @param desc 文字列表現
+     * @return 生成されたLocation
+     */
+    public static Location convDescToLocation(String desc) {
+
+        String[] args = desc.split("_");
+        if ( args.length >= 4 ) {
+            return null;
+        }
+
+        World world = ShooterArena.getWorld(args[0]);
+        if ( world == null ) {
+            return null;
+        }
+
+        if ( !Utility.tryIntParse(args[1]) ||
+                !Utility.tryIntParse(args[2]) ||
+                !Utility.tryIntParse(args[3]) ) {
+            return null;
+        }
+        double x = Integer.parseInt(args[1]) + 0.5;
+        double y = Integer.parseInt(args[2]);
+        double z = Integer.parseInt(args[3]) + 0.5;
+
+        return new Location(world, x, y, z);
+    }
+
+    /**
+     * 指定されたlocationを、使いやすいように、ブロックの中心に変更します。
+     * @param location 変換するLocation
+     * @return 変換されたLocation
+     */
+    public static Location toCenterOfBlock(Location location) {
+
+        double x = location.getBlockX() + 0.5;
+        double y = location.getBlockY();
+        double z = location.getBlockZ() + 0.5;
+
+        return new Location(location.getWorld(), x, y, z);
+    }
+
+    /**
+     * 指定のブロックが、看板かどうかを調べる
+     * @param block ブロック
+     * @return 看板かどうか
+     */
+    public static boolean isSign(Block block) {
+
+        if ( block == null ) {
+            return false;
+        }
+
+        return ( block.getType() == Material.SIGN ||
+                block.getType() == Material.SIGN_POST ||
+                block.getType() == Material.WALL_SIGN );
     }
 }

@@ -33,7 +33,7 @@ public class Shooter implements ICustomItem {
         LORE.add("残り燃料を確認することが出来る。");
     }
 
-    private static final int DEFAULT_LEVEL = 6;
+    private static final int DEFAULT_LEVEL = 5;
     private static final int DEFAULT_COST = 10;
     private static final int MAX_LEVEL = 15;
     private static final int RANGE = 50;

@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 
 import com.github.ucchyocean.sa.SAConfig;
 
-
 /**
  * @author ucchy
  *
@@ -30,6 +29,7 @@ public class ReloadCommand extends CommandAbst {
     @Override
     public boolean doCommand(CommandSender sender, String[] args) {
         SAConfig.reloadConfig();
+        sender.sendMessage(PREINFO + "config.yml を再読み込みしました。");
         return true;
     }
 

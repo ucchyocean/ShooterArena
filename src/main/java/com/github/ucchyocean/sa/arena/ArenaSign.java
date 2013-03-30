@@ -5,11 +5,14 @@
  */
 package com.github.ucchyocean.sa.arena;
 
-import java.util.ArrayList;
-
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+
+import com.github.ucchyocean.sa.Utility;
+import com.github.ucchyocean.sa.game.MatchMode;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -45,19 +48,25 @@ public class ArenaSign {
     };
 
     private Arena parent;
-    private Sign main;
-    private Sign sub;
+    private Sign sign;
 
     /**
      * コンストラクタ
      * @param parent アリーナ
-     * @param main メインのカンバン
+     * @param sign メインのカンバン
      * @param sub サブのカンバン
      */
-    public ArenaSign(Arena parent, Sign main, Sign sub) {
-        this.parent = parent;
-        this.main = main;
-        this.sub = sub;
+    protected ArenaSign(Sign sign) {
+        this.sign = sign;
+    }
+
+    /**
+     * 対応するアリーナを設定する
+     * @param arena アリーナ
+     */
+    protected void setParent(Arena arena) {
+        this.parent = arena;
+        arena.setSign(this);
     }
 
     /**
@@ -66,13 +75,13 @@ public class ArenaSign {
      * @return このオブジェクトのカンバンかどうか
      */
     public boolean equalsSign(Sign sign) {
-        return (main.equals(sign) || sub.equals(sign));
+        return sign.equals(sign);
     }
 
     /**
      * ゲームマッチ準備中の内容に変更する
      */
-    public void setPrepare() {
+    private void setPrepare() {
 
         String mode = "";
         if ( parent.getMode() != null ) {
@@ -80,87 +89,59 @@ public class ArenaSign {
         }
         String title = String.format("[%s]", parent.getName());
         String type = String.format(MESSAGE_PREPARE[0], mode);
-        main.setLine(0, title);
-        main.setLine(1, type);
-        main.setLine(2, MESSAGE_PREPARE[1]);
-        main.setLine(3, MESSAGE_PREPARE[2]);
-        main.update();
+        sign.setLine(0, title);
+        sign.setLine(1, type);
+        sign.setLine(2, MESSAGE_PREPARE[1]);
+        sign.setLine(3, MESSAGE_PREPARE[2]);
+        sign.update();
     }
 
     /**
      * ゲームマッチ募集中の内容に変更する
      */
-    public void setMatching() {
+    private void setMatching() {
 
         String title = String.format("[%s]", parent.getName());
         String type = String.format(
                 MESSAGE_MATCHING[0],
                 parent.getMode().type.toJapanese());
-        main.setLine(0, title);
-        main.setLine(1, type);
-        main.setLine(2, MESSAGE_MATCHING[1]);
-        main.setLine(3, MESSAGE_MATCHING[2]);
-        main.update();
+        sign.setLine(0, title);
+        sign.setLine(1, type);
+        sign.setLine(2, MESSAGE_MATCHING[1]);
+        sign.setLine(3, MESSAGE_MATCHING[2]);
+        sign.update();
     }
 
     /**
      * ゲームマッチ満員の内容に変更する
      */
-    public void setMatchingFull() {
+    private void setMatchingFull() {
 
         String title = String.format("[%s]", parent.getName());
         String type = String.format(
                 MESSAGE_MATCHING_FULL[0],
                 parent.getMode().type.toJapanese());
-        main.setLine(0, title);
-        main.setLine(1, type);
-        main.setLine(2, MESSAGE_MATCHING_FULL[1]);
-        main.setLine(3, MESSAGE_MATCHING_FULL[2]);
-        main.update();
+        sign.setLine(0, title);
+        sign.setLine(1, type);
+        sign.setLine(2, MESSAGE_MATCHING_FULL[1]);
+        sign.setLine(3, MESSAGE_MATCHING_FULL[2]);
+        sign.update();
     }
 
     /**
      * ゲームマッチゲーム中の内容に変更する
      */
-    public void setInGame() {
+    private void setInGame() {
 
         String title = String.format("[%s]", parent.getName());
         String type = String.format(
                 MESSAGE_IN_GAME[0],
                 parent.getMode().type.toJapanese());
-        main.setLine(0, title);
-        main.setLine(1, type);
-        main.setLine(2, MESSAGE_IN_GAME[1]);
-        main.setLine(3, MESSAGE_IN_GAME[2]);
-        main.update();
-    }
-
-    /**
-     * サブのカンバンの内容をクリアする
-     */
-    public void clearSub() {
-
-        for ( int i=0; i<4; i++ )
-            sub.setLine(i, "");
-        sub.update();
-    }
-
-    /**
-     * サブのカンバンの内容を設定する
-     * @param names
-     */
-    public void setSub(ChatColor color, ArrayList<String> names) {
-
-        for ( int i=0; i<4; i++ )
-            sub.setLine(i, "");
-
-        int index = 0;
-        while ( index < 4 && index < names.size() ) {
-            sub.setLine(index, color + names.get(index) + ChatColor.RESET);
-            index++;
-        }
-
-        sub.update();
+        sign.setLine(0, title);
+        sign.setLine(1, type);
+        sign.setLine(2, MESSAGE_IN_GAME[1]);
+        sign.setLine(3, MESSAGE_IN_GAME[2]);
+        sign.update();
     }
 
     /**
@@ -169,8 +150,8 @@ public class ArenaSign {
      */
     public void onHit(Player player) {
 
-
-        if ( parent.getSession() == null ) {
+        // TODO
+        if ( ArenaManager.getSession(parent.getName()) == null ) {
 
         }
     }
@@ -178,14 +159,59 @@ public class ArenaSign {
     /**
      * 看板をArenaの登録から解除して、普通の看板にする。
      */
-    public void remove() {
+    protected void remove() {
 
         for ( int i=0; i<4; i++ )
-            main.setLine(i, "");
-        main.update();
+            sign.setLine(i, "");
+        sign.update();
 
-        for ( int i=0; i<4; i++ )
-            sub.setLine(i, "");
-        sub.update();
+        parent.setSign(null);
+    }
+
+    /**
+     * ArenaSignの設置されている場所を表現する文字列を返す
+     * @return
+     */
+    protected String toLocationDesc() {
+
+        Location location = sign.getLocation();
+        return Utility.convLocationToDesc(location);
+    }
+
+    /**
+     * 文字列表現から、ArenaSignを生成して返す。
+     * @param arena 紐付けるArena
+     * @param desc 文字列表現
+     * @return 生成されたArenaSign、指定内容が無効である場合は nullになる。
+     */
+    protected static ArenaSign fromLocationDesc(Arena arena, String desc) {
+
+        Location location = Utility.convDescToLocation(desc);
+        if ( location == null ) {
+            return null;
+        }
+
+        Block block = location.getWorld().getBlockAt(location);
+        if ( !Utility.isSign(block) ) {
+            return null;
+        }
+
+        Sign sign = (Sign)block.getState();
+        ArenaSign as = new ArenaSign(sign);
+        as.setParent(arena);
+        return as;
+    }
+
+    /**
+     * 親のArenaの状態を取得して、ArenaSignを更新します。
+     */
+    protected void refresh() {
+
+        MatchMode mode = parent.getMode();
+        if ( mode == null ) {
+            setPrepare();
+        }
+
+        // TODO
     }
 }

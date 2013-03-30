@@ -38,6 +38,19 @@ public class MatchMode {
     }
 
     /**
+     * コンストラクタ
+     * @param type ゲームタイプ
+     * @param life 規定のライフ数。無制限の場合は -1 であることに注意
+     * @param minute 制限時間（分）、無制限の場合は -1 であることに注意
+     */
+    public MatchMode(GameType type, int life, int minute) {
+
+        this.type = type;
+        this.life = life;
+        this.minute = minute;
+    }
+
+    /**
      * このオフジェクトの日本語表現
      * @return 日本語表現
      */

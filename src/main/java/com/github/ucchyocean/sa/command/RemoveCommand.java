@@ -49,7 +49,7 @@ public class RemoveCommand extends CommandAbst {
             return true;
         }
 
-        SAGameSession session = arena.getSession();
+        SAGameSession session = ArenaManager.getSession(arena.getName());
 
         if ( session != null ) {
             sender.sendMessage(PREERR + "アリーナ" + name + "にゲームが存在します。");

@@ -5,8 +5,11 @@
  */
 package com.github.ucchyocean.sa.arena;
 
+import org.bukkit.Location;
+import org.bukkit.util.Vector;
+
+import com.github.ucchyocean.sa.Utility;
 import com.github.ucchyocean.sa.game.MatchMode;
-import com.github.ucchyocean.sa.game.SAGameSession;
 
 /**
  * @author ucchy
@@ -17,7 +20,11 @@ public class Arena {
     private ArenaSign sign;
     private String name;
     private MatchMode mode;
-    private SAGameSession session;
+
+    private Location redTeamRespawn;
+    private Vector redTeamCatapultVector;
+    private Location blueTeamRespawn;
+    private Vector blueTeamCatapultVector;
 
     /**
      * コンストラクタ
@@ -39,7 +46,7 @@ public class Arena {
      * アリーナサインを設定する
      * @param sign アリーナサイン
      */
-    public void setSign(ArenaSign sign) {
+    protected void setSign(ArenaSign sign) {
         this.sign = sign;
     }
 
@@ -47,24 +54,8 @@ public class Arena {
      * アリーナサインを取得する
      * @return アリーナサイン
      */
-    public ArenaSign getSign() {
+    protected ArenaSign getSign() {
         return sign;
-    }
-
-    /**
-     * ゲームセッションを設定します。null指定で消去します。
-     * @param session ゲームセッション
-     */
-    public void setSession(SAGameSession session) {
-        this.session = session;
-    }
-
-    /**
-     * 現在設定されているゲームセッションを返します。
-     * @return 現在設定されているゲームセッション
-     */
-    public SAGameSession getSession() {
-        return session;
     }
 
     /**
@@ -87,8 +78,81 @@ public class Arena {
      */
     public void setDisable() {
         setMode(null);
+        refreshSign();
+    }
+
+    /**
+     * アリーナサインを更新します。
+     */
+    public void refreshSign() {
         if ( sign != null ) {
-            sign.setPrepare();
+            sign.refresh();
         }
+    }
+
+    /**
+     * 赤チームのリスポーンポイントを設定します。
+     * @param location
+     */
+    protected void setRedRespawn(Location location) {
+        this.redTeamRespawn = Utility.toCenterOfBlock(location);
+        this.redTeamCatapultVector = location.getDirection().normalize();
+    }
+
+    /**
+     * 赤チームのカタパルト打ち出し用ベクトルを設定します。
+     * @param vector
+     */
+    protected void setRedVector(Vector vector) {
+        this.redTeamCatapultVector = vector;
+    }
+
+    /**
+     * 赤チームのリスポーンポイントを取得します。
+     * @return
+     */
+    public Location getRedRespawn() {
+        return redTeamRespawn;
+    }
+
+    /**
+     * 赤チームのカタパルト打ち出し用ベクトルを取得します。
+     * @return
+     */
+    public Vector getRedVector() {
+        return redTeamCatapultVector;
+    }
+
+    /**
+     * 青チームのリスポーンポイントを設定します。
+     * @param location
+     */
+    protected void setBlueRespawn(Location location) {
+        this.blueTeamRespawn = Utility.toCenterOfBlock(location);
+        this.blueTeamCatapultVector = location.getDirection().normalize();
+    }
+
+    /**
+     * 青チームのカタパルト打ち出し用ベクトルを設定します。
+     * @param vector
+     */
+    protected void setBlueVector(Vector vector) {
+        this.blueTeamCatapultVector = vector;
+    }
+
+    /**
+     * 青チームのリスポーンポイントを取得します。
+     * @return
+     */
+    public Location getBlueRespawn() {
+        return blueTeamRespawn;
+    }
+
+    /**
+     * 青チームのカタパルト打ち出し用ベクトルを取得します。
+     * @return
+     */
+    public Vector getBlueVector() {
+        return blueTeamCatapultVector;
     }
 }
