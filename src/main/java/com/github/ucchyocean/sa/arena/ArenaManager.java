@@ -276,10 +276,10 @@ public class ArenaManager {
         Enumeration<String> keys = arenas.keys();
         while ( keys.hasMoreElements() ) {
             String key = keys.nextElement();
-            SAGameSession session = sessions.get(key);
-            if ( session == null ) {
+            if ( sessions.containsKey(key) ) {
                 result.add(key + " - 空き");
             } else {
+                SAGameSession session = sessions.get(key);
                 result.add(key + " - " + session.phase.toJapanese());
             }
         }
@@ -325,6 +325,16 @@ public class ArenaManager {
     public static void removeSession(String name) {
         if ( sessions.containsKey(name) ) {
             sessions.remove(name);
+        }
+    }
+
+    /**
+     * 全てのゲームセッションをキャンセルする
+     */
+    public static void cancelAllSessions() {
+        for ( String key : sessions.keySet() ) {
+            SAGameSession session = sessions.get(key);
+            session.cancelGame();
         }
     }
 

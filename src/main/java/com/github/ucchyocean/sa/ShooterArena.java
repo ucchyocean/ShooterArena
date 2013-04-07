@@ -8,6 +8,7 @@ package com.github.ucchyocean.sa;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 import com.github.ucchyocean.sa.command.ShooterCommand;
+import com.github.ucchyocean.sa.game.GameTimer;
 import com.github.ucchyocean.sa.game.SAGameLogger;
 import com.github.ucchyocean.sa.item.ICustomItem;
 import com.github.ucchyocean.sa.item.Shooter;
@@ -27,8 +29,17 @@ import com.github.ucchyocean.sa.listener.LoungeSignListener;
  */
 public class ShooterArena extends JavaPlugin {
 
+    public static final String PREFIX = "[SA]";
+    public static final String PREERR = ChatColor.RED + PREFIX;
+    public static final String PREINFO = ChatColor.AQUA + PREFIX;
+    public static final String PRENOTICE = ChatColor.LIGHT_PURPLE + PREFIX;
+
     public static ShooterArena instance;
     public static WorldGuardHandler wghandler;
+    public static KitHandler khandler;
+    public static TeamHandler thandler;
+
+    public static ArrayList<Player> freezePlayers;
 
     /**
      * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
@@ -65,6 +76,11 @@ public class ShooterArena extends JavaPlugin {
         // コマンドの登録
         getCommand("ShooterArena").setExecutor(new ShooterArenaCommand());
         getCommand("Shooter").setExecutor(new ShooterCommand());
+
+        // その他初期化
+        khandler = new KitHandler(getLogger());
+        thandler = new TeamHandler(this.getServer().getScoreboardManager().getMainScoreboard());
+        freezePlayers = new ArrayList<Player>();
     }
 
     /**
@@ -73,7 +89,8 @@ public class ShooterArena extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        // TODO 全てのGameSessionをキャンセルする
+        // 全てのGameSessionをキャンセルする
+
     }
 
     /**
@@ -142,5 +159,9 @@ public class ShooterArena extends JavaPlugin {
      */
     protected static File getPluginJarFile() {
         return instance.getFile();
+    }
+
+    public static void startGameTimer(GameTimer timer) {
+        instance.getServer().getScheduler().scheduleSyncRepeatingTask(instance, timer, 20, 20);
     }
 }

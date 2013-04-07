@@ -11,6 +11,9 @@ package com.github.ucchyocean.sa.game;
  */
 public enum GameType {
 
+    /** 練習モード 1人用 */
+    PRACTICE("practice"),
+
     /** n回死んだら負けのルール、個人戦 */
     DUEL_DEATH_MATCH("duel_death_match"),
 
@@ -37,6 +40,11 @@ public enum GameType {
         return id;
     }
 
+    /**
+     * 文字列表記から、GameTypeを返す
+     * @param id 文字列表記
+     * @return GameType
+     */
     public static GameType fromString(String id) {
         GameType[] values = values();
         for ( GameType value : values ) {
@@ -61,6 +69,8 @@ public enum GameType {
             return "チームデスマッチ";
         case TEAM_TIME_MATCH:
             return "チームタイムマッチ";
+        case PRACTICE:
+            return "プラクティス";
         default:
             return "不明";
         }
@@ -78,6 +88,8 @@ public enum GameType {
         case TEAM_DEATH_MATCH:
         case TEAM_TIME_MATCH:
             return 4;
+        case PRACTICE:
+            return 1;
         default:
             return 2;
         }

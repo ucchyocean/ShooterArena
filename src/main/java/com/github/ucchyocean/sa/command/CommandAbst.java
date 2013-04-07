@@ -5,9 +5,10 @@
  */
 package com.github.ucchyocean.sa.command;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+
+import com.github.ucchyocean.sa.ShooterArena;
 
 /**
  * @author ucchy
@@ -15,9 +16,9 @@ import org.bukkit.command.CommandSender;
  */
 public abstract class CommandAbst {
 
-    protected String PREERR = ChatColor.RED + "[SA]";
-    protected String PREINFO = ChatColor.AQUA + "[SA]";
-    protected String PRENOTICE = ChatColor.LIGHT_PURPLE + "[SA]";
+    protected String PREERR = ShooterArena.PREERR;
+    protected String PREINFO = ShooterArena.PREINFO;
+    protected String PRENOTICE = ShooterArena.PRENOTICE;
 
     /**
      * コマンド識別子を返す

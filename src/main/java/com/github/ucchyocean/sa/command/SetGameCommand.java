@@ -18,7 +18,7 @@ import com.github.ucchyocean.sa.game.MatchMode;
  */
 public class SetGameCommand extends CommandAbst {
 
-    private static final String USAGE = "/sa setGame (arena) (type) (amount)";
+    public static final String USAGE = "/sa setGame (arena) (type) (amount)";
 
     /**
      * @see com.github.ucchyocean.sa.command.CommandAbst#getCommand()

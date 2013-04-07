@@ -1,6 +1,6 @@
 name: ShooterArena
 main: com.github.ucchyocean.sa.ShooterArena
-version: 0.1.0
+version: 1.0.0
 author: ucchy
 description: Shooterを使ったPVPを管理するためのアリーナプラグイン
 depend: [WorldGuard]

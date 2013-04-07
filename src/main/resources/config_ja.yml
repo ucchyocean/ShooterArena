@@ -1,39 +1,37 @@
-# Shooter Arena v0.1.0
+# Shooter Arena v1.0.0
 # @author     ucchy
 # @license    GPLv3
 # @copyright  Copyright ucchy 2013
+#
+# defaultWorldName: ShooterArenaで遊ぶワールドの、ワールド名を指定します。
+# defaultWorldName: Shooterのパワーレベルを指定します。
+# shooterCost: Shooterを一回打つのに必要なコストを設定します。
+# reviveExp: 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうかを設定します。
+# reviveExpSeconds: reviveExp が true の場合、燃料切れになってから何秒で再燃料が提供されるかを設定します。
+# reviveExpAmount: reviveExp が true の場合、再提供される量を設定します。
+# catapultOnRespawn: リスポーン時に射出されるかどうかを設定します。
+# catapultPower: catapultOnRespawn が true の場合、射出する速度を設定します。
+# kits: ゲーム開始時の配布設定
+# kits.giveExp: ゲーム開始時に配布するexpを設定します。
+# kits.items: ゲーム開始時に配布するアイテムを設定します。
+# kits.armors: ゲーム開始時に配布する防具を設定します。
+# chatMode: チャットモードを設定します。（global: 通常のチャット、arena: アリーナ内限定、team: チーム内限定）
 
-# ShooterArenaで遊ぶワールドの、ワールド名を指定します。
 defaultWorldName: world
 
-# Shooterのパワーレベルを指定します。
 shooterPower: 5
-
-# Shooterを一回打つのに必要なexpコストを設定します。
 shooterCost: 10
 
-# 燃料切れになったときに、一定時間経過後に燃料が再提供されるかどうかを設定します。
 reviveExp: true
-
-# reviveExp が true の場合、燃料切れになってから何秒で再燃料が提供されるかを設定します。
 reviveExpSeconds: 15
-
-# reviveExp が true の場合、再提供される量を設定します。
 reviveExpAmount: 100
 
-# リスポーン時に射出されるかどうかを設定します。
 catapultOnRespawn: true
-
-# catapultOnRespawn が true の場合、射出する速度を設定します。
 catapultPower: 5
 
-# ゲーム開始時の配布設定
 kits:
-  # ゲーム開始時に配布するexpを設定します。
   giveExp: 1500
-
-  # ゲーム開始時に配布するアイテムを設定します。
   items: ''
-
-  # ゲーム開始時に配布する防具を設定します。
   armors: ''
+
+chatMode: team

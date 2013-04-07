@@ -11,8 +11,12 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.Utility;
+import com.github.ucchyocean.sa.command.SetGameCommand;
+import com.github.ucchyocean.sa.game.GamePhase;
 import com.github.ucchyocean.sa.game.MatchMode;
+import com.github.ucchyocean.sa.game.SAGameSession;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -150,8 +154,32 @@ public class ArenaSign {
      */
     public void onHit(Player player) {
 
-        // TODO
+        if ( ArenaManager.getSessionByPlayer(player) != null ) {
+            player.sendMessage(ShooterArena.PREERR +
+                    "あなたは既にゲームに参加中です。");
+            return;
+        }
+
         if ( ArenaManager.getSession(parent.getName()) == null ) {
+            // アリーナのゲームセッションが無い場合
+
+            if ( parent.getMode() == null ) {
+                player.sendMessage(ShooterArena.PREERR +
+                        "このアリーナには、ゲームモードが設定されていません。");
+                player.sendMessage(ShooterArena.PREERR +
+                        "先にsetGameコマンドで、ゲームモードを設定してください。");
+                player.sendMessage(ShooterArena.PREINFO + SetGameCommand.USAGE);
+                return;
+
+            } else {
+                // 新規ゲームセッションの作成
+                ArenaManager.createNewGameSession(parent, player);
+                return;
+            }
+
+        } else {
+            // アリーナのゲームセッションに参加する場合
+
 
         }
     }
@@ -210,8 +238,30 @@ public class ArenaSign {
         MatchMode mode = parent.getMode();
         if ( mode == null ) {
             setPrepare();
+            return;
         }
 
-        // TODO
+        SAGameSession session = ArenaManager.getSession(parent.getName());
+        if ( session == null ) {
+            setMatching();
+            return;
+        }
+
+        if ( session.phase == GamePhase.IN_GAME ) {
+            setInGame();
+            return;
+        }
+
+        if ( session.phase == GamePhase.MATCH_MAKING ) {
+            if ( session.isFull() ) {
+                setMatchingFull();
+                return;
+            } else {
+                setMatching();
+                return;
+            }
+        }
+
+        setPrepare();
     }
 }

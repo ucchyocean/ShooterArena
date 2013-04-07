@@ -7,8 +7,10 @@ package com.github.ucchyocean.sa;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * @author ucchy
@@ -49,6 +51,12 @@ public class SAConfig {
     /** ゲーム開始時に配布する防具 */
     public static String kitsArmors;
 
+    /** チャットモード */
+    public static ChatMode chatmode;
+
+    private static ArrayList<ItemStack> kitsItemsTemp;
+    private static ArrayList<ItemStack> kitsArmorsTemp;
+
     /**
      * config.ymlの読み出し処理。
      * @throws IOException
@@ -75,6 +83,33 @@ public class SAConfig {
         kitsExp = config.getInt("kits.exp", 1500);
         kitsItems = config.getString("kits.items", "");
         kitsArmors = config.getString("kits.armors", "");
+        chatmode = ChatMode.fromString(config.getString("chatMode", "team"));
+    }
+
+    /**
+     * アイテムキットを取得する
+     * @return アイテムキット
+     */
+    public static ArrayList<ItemStack> getKitsItems() {
+
+        if ( kitsItemsTemp == null ) {
+            kitsItemsTemp = ShooterArena.khandler.convertToItemStack(kitsItems);
+        }
+
+        return kitsItemsTemp;
+    }
+
+    /**
+     * アーマーキットを取得する
+     * @return アーマーキット
+     */
+    public static ArrayList<ItemStack> getKitsArmors() {
+
+        if ( kitsArmorsTemp == null ) {
+            kitsArmorsTemp = ShooterArena.khandler.convertToItemStack(kitsArmors);
+        }
+
+        return kitsArmorsTemp;
     }
 
     /**
