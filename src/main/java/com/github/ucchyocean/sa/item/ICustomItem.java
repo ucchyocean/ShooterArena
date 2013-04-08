@@ -33,14 +33,14 @@ public interface ICustomItem {
     public ItemStack getItem();
 
     /**
-     * DisplayNameを取得するメソッド
-     * @return DisplayName
+     * アイテム表示名を取得するメソッド
+     * @return アイテム表示名
      */
     public String getDisplayName();
 
     /**
      * カスタムアイテム名を取得するメソッド
-     * @return
+     * @return アイテム名
      */
     public String getName();
 }

@@ -46,7 +46,7 @@ public class Shooter implements ICustomItem {
      */
     public Shooter() {
 
-        item = new ItemStack(Material.BOW, 1);
+        item = new ItemStack(Material.TRIPWIRE_HOOK, 1);
         ItemMeta shooterMeta = item.getItemMeta();
         shooterMeta.setDisplayName(DISPLAY_NAME);
         shooterMeta.setLore(LORE);
@@ -126,7 +126,7 @@ public class Shooter implements ICustomItem {
      * @see com.github.ucchyocean.sa.item.ICustomItem#getItem()
      */
     public ItemStack getItem() {
-        return item.clone();
+        return give(DEFAULT_LEVEL);
     }
 
     /**
@@ -136,6 +136,9 @@ public class Shooter implements ICustomItem {
         return DISPLAY_NAME;
     }
 
+    /**
+     * @see com.github.ucchyocean.sa.item.ICustomItem#getName()
+     */
     public String getName() {
         return NAME;
     }
