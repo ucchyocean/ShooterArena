@@ -17,11 +17,11 @@ public class GameTimer extends BukkitRunnable {
 
     public static final String PRENOTICE = ShooterArena.PRENOTICE;
 
-    private SAGameSession parent;
+    private GameSession parent;
     private int secondsReadyLeast;
     private int secondsGameLeast;
 
-    public GameTimer(SAGameSession session, int secondsReady, int secondsGame) {
+    public GameTimer(GameSession session, int secondsReady, int secondsGame) {
         parent = session;
         secondsReadyLeast = secondsReady;
         secondsGameLeast = secondsGame;

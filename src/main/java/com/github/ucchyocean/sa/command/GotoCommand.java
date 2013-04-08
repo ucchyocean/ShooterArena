@@ -47,18 +47,19 @@ public class GotoCommand extends CommandAbst {
 
         String name = args[1];
 
-        if ( !ArenaManager.existArenaName(name) ) {
+        if ( !name.equalsIgnoreCase("lounge") && !ArenaManager.existArenaName(name) ) {
             sender.sendMessage(PREERR + "指定されたアリーナ名" + name + "が存在しません。");
             return true;
         }
 
-        Arena arena = ArenaManager.getArena(name);
-        if ( arena == null ) {
-            sender.sendMessage(PREERR + "指定されたアリーナ名" + name + "が存在しません。");
-            return true;
+        Location loc = null;
+        if ( name.equalsIgnoreCase("lounge") ) {
+            loc = ArenaManager.getLoungeRespawn();
+        } else {
+            Arena arena = ArenaManager.getArena(name);
+            loc = arena.getRedRespawn();
         }
 
-        Location loc = arena.getRedRespawn();
         if ( loc == null ) {
             sender.sendMessage(PREERR + "指定されたアリーナ" + name + "に、リスポーン地点が設定されていません。");
             return true;

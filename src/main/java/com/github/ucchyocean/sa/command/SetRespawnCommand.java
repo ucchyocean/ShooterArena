@@ -45,7 +45,7 @@ public class SetRespawnCommand extends CommandAbst {
             return true;
         }
 
-        if ( !args[1].equalsIgnoreCase("red") || !args[1].equalsIgnoreCase("blue") ) {
+        if ( !args[1].equalsIgnoreCase("red") && !args[1].equalsIgnoreCase("blue") ) {
             sender.sendMessage(PREERR + "グループ red または blue を指定してください。");
             sender.sendMessage(PREINFO + "USAGE : " + USAGE);
             return true;

@@ -213,6 +213,10 @@ public class Utility {
      */
     public static Location toCenterOfBlock(Location location) {
 
+        if ( location == null ) {
+            return null;
+        }
+
         double x = location.getBlockX() + 0.5;
         double y = location.getBlockY();
         double z = location.getBlockZ() + 0.5;

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -38,7 +38,7 @@ public class StartCommand extends CommandAbst {
         }
 
         Player player = (Player)sender;
-        SAGameSession session = ArenaManager.getSessionByPlayer(player);
+        GameSession session = ArenaManager.getSessionByPlayer(player);
 
         if ( session == null ) {
             sender.sendMessage(PREERR + "あなたはゲーム参加中のプレイヤーではありません。");

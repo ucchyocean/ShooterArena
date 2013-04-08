@@ -96,7 +96,7 @@ public class Arena {
      */
     protected void setRedRespawn(Location location) {
         this.redTeamRespawn = Utility.toCenterOfBlock(location);
-        this.redTeamCatapultVector = location.getDirection().normalize();
+        //this.redTeamCatapultVector = location.getDirection().normalize();
     }
 
     /**
@@ -129,7 +129,7 @@ public class Arena {
      */
     protected void setBlueRespawn(Location location) {
         this.blueTeamRespawn = Utility.toCenterOfBlock(location);
-        this.blueTeamCatapultVector = location.getDirection().normalize();
+        //this.blueTeamCatapultVector = location.getDirection().normalize();
     }
 
     /**

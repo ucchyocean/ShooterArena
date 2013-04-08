@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -40,7 +40,7 @@ public class LeaveCommand extends CommandAbst {
         }
 
         Player player = (Player)sender;
-        SAGameSession session = ArenaManager.getSessionByPlayer(player);
+        GameSession session = ArenaManager.getSessionByPlayer(player);
 
         if ( session == null ) {
             sender.sendMessage(PREERR + "あなたはゲーム参加中のプレイヤーではありません。");

@@ -16,7 +16,7 @@ import com.github.ucchyocean.sa.Utility;
 import com.github.ucchyocean.sa.command.SetGameCommand;
 import com.github.ucchyocean.sa.game.GamePhase;
 import com.github.ucchyocean.sa.game.MatchMode;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -241,7 +241,7 @@ public class ArenaSign {
             return;
         }
 
-        SAGameSession session = ArenaManager.getSession(parent.getName());
+        GameSession session = ArenaManager.getSession(parent.getName());
         if ( session == null ) {
             setMatching();
             return;

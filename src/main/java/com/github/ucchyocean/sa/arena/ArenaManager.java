@@ -25,7 +25,7 @@ import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.Utility;
 import com.github.ucchyocean.sa.game.GameType;
 import com.github.ucchyocean.sa.game.MatchMode;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -34,11 +34,11 @@ import com.github.ucchyocean.sa.game.SAGameSession;
 public class ArenaManager {
 
     protected static Hashtable<String, Arena> arenas;
-    protected static Hashtable<String, SAGameSession> sessions;
+    protected static Hashtable<String, GameSession> sessions;
     protected static Location loungeRespawn;
     static {
         arenas = new Hashtable<String, Arena>();
-        sessions = new Hashtable<String, SAGameSession>();
+        sessions = new Hashtable<String, GameSession>();
     }
 
     private static File file;
@@ -105,6 +105,12 @@ public class ArenaManager {
                 conf.set("arenas." + name + ".blue.catapult.z", blueVector.getZ());
             }
         }
+
+        try {
+            conf.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -139,7 +145,7 @@ public class ArenaManager {
 
         // 一旦初期化
         arenas = new Hashtable<String, Arena>();
-        sessions = new Hashtable<String, SAGameSession>();
+        sessions = new Hashtable<String, GameSession>();
 
         // arenas の復帰
         ConfigurationSection arenaSection = conf.getConfigurationSection("arenas");
@@ -262,6 +268,7 @@ public class ArenaManager {
     public static void removeArena(String name) {
         if ( arenas.containsKey(name) ) {
             arenas.remove(name);
+            save();
         }
     }
 
@@ -279,7 +286,7 @@ public class ArenaManager {
             if ( sessions.containsKey(key) ) {
                 result.add(key + " - 空き");
             } else {
-                SAGameSession session = sessions.get(key);
+                GameSession session = sessions.get(key);
                 result.add(key + " - " + session.phase.toJapanese());
             }
         }
@@ -292,8 +299,8 @@ public class ArenaManager {
      * @param arena ゲームを行うアリーナ
      * @return 新しいゲームセッション
      */
-    public static SAGameSession createNewGameSession(Arena arena, Player leader) {
-        SAGameSession session = new SAGameSession(arena);
+    public static GameSession createNewGameSession(Arena arena, Player leader) {
+        GameSession session = new GameSession(arena);
         session.addPlayer(leader.getName());
         sessions.put(arena.getName(), session);
         return session;
@@ -304,7 +311,7 @@ public class ArenaManager {
      * @param name アリーナ名
      * @return ゲームセッション
      */
-    public static SAGameSession getSession(String name) {
+    public static GameSession getSession(String name) {
         return sessions.get(name);
     }
 
@@ -312,7 +319,7 @@ public class ArenaManager {
      * ゲームセッションを削除する
      * @param session 削除するゲームセッション
      */
-    public static void removeSession(SAGameSession session) {
+    public static void removeSession(GameSession session) {
         if ( sessions.contains(session) ) {
             sessions.remove(session.arena);
         }
@@ -333,7 +340,7 @@ public class ArenaManager {
      */
     public static void cancelAllSessions() {
         for ( String key : sessions.keySet() ) {
-            SAGameSession session = sessions.get(key);
+            GameSession session = sessions.get(key);
             session.cancelGame();
         }
     }
@@ -343,11 +350,11 @@ public class ArenaManager {
      * @param player プレイヤー
      * @return ゲームセッション
      */
-    public static SAGameSession getSessionByPlayer(Player player) {
+    public static GameSession getSessionByPlayer(Player player) {
         Enumeration<String> keys = sessions.keys();
         while ( keys.hasMoreElements() ) {
             String key = keys.nextElement();
-            SAGameSession session = sessions.get(key);
+            GameSession session = sessions.get(key);
             if ( session.getPlayers().contains(player.getName()) ) {
                 return session;
             }
@@ -407,6 +414,7 @@ public class ArenaManager {
      */
     public static void setRedRespawn(Arena arena, Location location) {
         arena.setRedRespawn(location);
+        arena.setRedVector(location.getDirection().normalize());
         save();
     }
 
@@ -417,6 +425,7 @@ public class ArenaManager {
      */
     public static void setBlueRespawn(Arena arena, Location location) {
         arena.setBlueRespawn(location);
+        arena.setBlueVector(location.getDirection().normalize());
         save();
     }
 

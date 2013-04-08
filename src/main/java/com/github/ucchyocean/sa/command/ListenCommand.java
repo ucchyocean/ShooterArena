@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import com.github.ucchyocean.sa.arena.Arena;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -66,7 +66,7 @@ public class ListenCommand extends CommandAbst {
             return true;
         }
 
-        SAGameSession session = ArenaManager.getSession(name);
+        GameSession session = ArenaManager.getSession(name);
         if ( session == null ) {
             sender.sendMessage(PREERR + "指定されたアリーナ" + name + "は、現在ゲームが行われていません。");
             return true;

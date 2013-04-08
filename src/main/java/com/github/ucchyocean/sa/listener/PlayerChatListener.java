@@ -14,7 +14,7 @@ import com.github.ucchyocean.sa.ChatMode;
 import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.arena.ArenaManager;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -52,7 +52,7 @@ public class PlayerChatListener implements Listener {
             return;
         }
 
-        SAGameSession session = ArenaManager.getSessionByPlayer(player);
+        GameSession session = ArenaManager.getSessionByPlayer(player);
 
         // ゲーム中のプレイヤーでなければ、何もせずに抜ける
         if ( session == null ) {

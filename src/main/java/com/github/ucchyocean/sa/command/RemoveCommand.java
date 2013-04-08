@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 import com.github.ucchyocean.sa.arena.Arena;
 import com.github.ucchyocean.sa.arena.ArenaManager;
-import com.github.ucchyocean.sa.game.SAGameSession;
+import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -49,7 +49,7 @@ public class RemoveCommand extends CommandAbst {
             return true;
         }
 
-        SAGameSession session = ArenaManager.getSession(arena.getName());
+        GameSession session = ArenaManager.getSession(arena.getName());
 
         if ( session != null ) {
             sender.sendMessage(PREERR + "アリーナ" + name + "にゲームが存在します。");

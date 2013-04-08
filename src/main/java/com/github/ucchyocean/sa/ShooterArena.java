@@ -18,7 +18,7 @@ import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.command.ShooterArenaCommand;
 import com.github.ucchyocean.sa.command.ShooterCommand;
 import com.github.ucchyocean.sa.game.GameTimer;
-import com.github.ucchyocean.sa.game.SAGameLogger;
+import com.github.ucchyocean.sa.game.GameLogger;
 import com.github.ucchyocean.sa.item.ICustomItem;
 import com.github.ucchyocean.sa.item.Shooter;
 import com.github.ucchyocean.sa.listener.CustomItemUseListener;
@@ -70,7 +70,7 @@ public class ShooterArena extends JavaPlugin {
         initializeCustomItems();
 
         // ゲームロガーの初期化
-        SAGameLogger.initialize(new File(getDataFolder(), "gamelog"));
+        GameLogger.initialize(new File(getDataFolder(), "gamelog"));
 
         // リスナーの登録
         getServer().getPluginManager().registerEvents(new LoungeSignListener(), this);
