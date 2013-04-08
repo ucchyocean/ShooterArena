@@ -19,7 +19,7 @@
 
 defaultWorldName: world
 
-shooterPower: 5
+shooterPower: 4
 shooterCost: 10
 
 reviveExp: true
@@ -31,7 +31,7 @@ catapultPower: 5
 
 kits:
   giveExp: 1500
-  items: ''
-  armors: ''
+  items: '267^16-2,(shooter),282:10'
+  armors: '0,299$667F33,300$667F33,0'
 
 chatMode: team

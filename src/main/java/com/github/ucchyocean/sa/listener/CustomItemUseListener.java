@@ -5,7 +5,7 @@
  */
 package com.github.ucchyocean.sa.listener;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -22,14 +22,14 @@ import com.github.ucchyocean.sa.item.ICustomItem;
  */
 public class CustomItemUseListener implements Listener {
 
-    private ArrayList<ICustomItem> items;
+    private Collection<ICustomItem> items;
 
     /**
      * コンストラクタ
-     * @param items リスナー対象にするカスタムアイテム
+     * @param collection リスナー対象にするカスタムアイテム
      */
-    public CustomItemUseListener(ArrayList<ICustomItem> items) {
-        this.items = items;
+    public CustomItemUseListener(Collection<ICustomItem> collection) {
+        this.items = collection;
     }
 
     /**

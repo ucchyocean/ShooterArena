@@ -7,6 +7,7 @@ package com.github.ucchyocean.sa;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -40,6 +41,7 @@ public class ShooterArena extends JavaPlugin {
     public static TeamHandler thandler;
 
     public static ArrayList<Player> freezePlayers;
+    public static Hashtable<String, ICustomItem> customItems;
 
     /**
      * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
@@ -90,7 +92,7 @@ public class ShooterArena extends JavaPlugin {
     public void onDisable() {
 
         // 全てのGameSessionをキャンセルする
-
+        ArenaManager.cancelAllSessions();
     }
 
     /**
@@ -98,10 +100,12 @@ public class ShooterArena extends JavaPlugin {
      */
     public void initializeCustomItems() {
 
-        ArrayList<ICustomItem> items = new ArrayList<ICustomItem>();
-        items.add(new Shooter());
+        customItems = new Hashtable<String, ICustomItem>();
 
-        CustomItemUseListener listener = new CustomItemUseListener(items);
+        ICustomItem shooter = new Shooter();
+        customItems.put(shooter.getName(), shooter);
+
+        CustomItemUseListener listener = new CustomItemUseListener(customItems.values());
         getServer().getPluginManager().registerEvents(listener, this);
     }
 

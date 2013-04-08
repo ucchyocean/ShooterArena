@@ -23,8 +23,9 @@ import com.github.ucchyocean.sa.PlayerExpHandler;
  */
 public class Shooter implements ICustomItem {
 
-    private static final String SHOOTER_NAME =
-            ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + "Shooter";
+    private static final String NAME = "shooter";
+    private static final String DISPLAY_NAME =
+            ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + NAME;
     private static final ArrayList<String> LORE;
     static {
         LORE = new ArrayList<String>();
@@ -33,7 +34,7 @@ public class Shooter implements ICustomItem {
         LORE.add("残り燃料を確認することが出来る。");
     }
 
-    private static final int DEFAULT_LEVEL = 5;
+    private static final int DEFAULT_LEVEL = 4;
     private static final int DEFAULT_COST = 10;
     private static final int MAX_LEVEL = 15;
     private static final int RANGE = 50;
@@ -47,7 +48,7 @@ public class Shooter implements ICustomItem {
 
         item = new ItemStack(Material.BOW, 1);
         ItemMeta shooterMeta = item.getItemMeta();
-        shooterMeta.setDisplayName(SHOOTER_NAME);
+        shooterMeta.setDisplayName(DISPLAY_NAME);
         shooterMeta.setLore(LORE);
         item.setItemMeta(shooterMeta);
     }
@@ -125,13 +126,17 @@ public class Shooter implements ICustomItem {
      * @see com.github.ucchyocean.sa.item.ICustomItem#getItem()
      */
     public ItemStack getItem() {
-        return item;
+        return item.clone();
     }
 
     /**
      * @see com.github.ucchyocean.sa.item.ICustomItem#getDisplayName()
      */
     public String getDisplayName() {
-        return SHOOTER_NAME;
+        return DISPLAY_NAME;
+    }
+
+    public String getName() {
+        return NAME;
     }
 }

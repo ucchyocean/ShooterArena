@@ -30,7 +30,8 @@ public class KitHandler {
 
     private static final String REGEX_ITEM_PATTERN =
             "([0-9]+)(?:@([0-9]+))?(?::([0-9]+))?|" +
-            "([0-9]+)((?:\\^[0-9]+-[0-9]+)*)(?:@([0-9]+))?(?:\\$([0-9A-Fa-f]{6}))?";
+            "([0-9]+)((?:\\^[0-9]+-[0-9]+)*)(?:@([0-9]+))?(?:\\$([0-9A-Fa-f]{6}))?|" +
+            "\\(([a-zA-Z0-9]+)\\)";
     private static final String REGEX_ENCHANT_PATTERN =
             "\\^([0-9]+)-([0-9]+)";
 
@@ -158,6 +159,18 @@ public class KitHandler {
             }
 
             return getEnchantedItem(item, enchants, damage, color);
+
+        } else if ( matcher.group(8) != null ) {
+            // group8 が null でないなら、カスタム形式の指定である。
+
+            String name = matcher.group(8);
+
+            if ( !ShooterArena.customItems.containsKey(name) ) {
+                logger.severe("指定されたカスタムアイテム " + name + " が見つかりません。");
+                return null;
+            }
+
+            return ShooterArena.customItems.get(name).getItem();
 
         } else {
             logger.severe("内部エラー : 正規表現が正しくマッチしていません。");

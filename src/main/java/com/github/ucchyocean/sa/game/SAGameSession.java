@@ -143,13 +143,12 @@ public class SAGameSession {
      */
     public void cancelGame() {
 
+        GamePhase prePhase = phase;
         this.phase = GamePhase.CANCELED;
 
         String message = "アリーナ " + arena + " のゲームがキャンセルされました。";
         logger.write(message);
         ShooterArena.sendBroadcast(ShooterArena.PRENOTICE + message);
-
-        refreshArenaSign();
 
         // タイマーをキャンセルする
         if ( timer != null ) {
@@ -160,8 +159,12 @@ public class SAGameSession {
         // アイテムをクリア
         clearPlayerInventory();
 
+        // プレイヤーをアンフリーズ
+        setFreeze(false);
+
         // プレイヤーをテレポート
-        teleportAllToLounge();
+        if ( prePhase == GamePhase.IN_GAME )
+            teleportAllToLounge();
 
         // チームわけを解除
         clearTeams();
@@ -172,6 +175,9 @@ public class SAGameSession {
 
         // セッションを削除する
         ArenaManager.removeSession(this);
+
+        // アリーナサインを更新する
+        refreshArenaSign();
     }
 
     /**
@@ -190,6 +196,9 @@ public class SAGameSession {
         // アイテムをクリア
         clearPlayerInventory();
 
+        // プレイヤーをアンフリーズ(念のため)
+        setFreeze(false);
+
         // プレイヤーをテレポート
         teleportAllToLounge();
 
@@ -202,6 +211,9 @@ public class SAGameSession {
 
         // セッションを削除する
         ArenaManager.removeSession(this);
+
+        // アリーナサインを更新する
+        refreshArenaSign();
     }
 
     /**

@@ -37,4 +37,10 @@ public interface ICustomItem {
      * @return DisplayName
      */
     public String getDisplayName();
+
+    /**
+     * カスタムアイテム名を取得するメソッド
+     * @return
+     */
+    public String getName();
 }
