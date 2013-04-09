@@ -42,7 +42,8 @@ public class GameTimer extends BukkitRunnable {
                 parent.annouceToAll(PRENOTICE + "ゲーム開始！");
                 // フリーズの解除
                 parent.setFreeze(false);
-                // TODO カタパルトの実行
+                // カタパルトの実行
+                parent.launchAllPlayer();
             }
 
         } else if ( secondsReadyLeast <= 0 && secondsGameLeast > 0 ) {

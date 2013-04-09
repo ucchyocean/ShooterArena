@@ -59,7 +59,7 @@ public class SetGameCommand extends CommandAbst {
         if ( type == null ) {
             sender.sendMessage(PREERR + "指定されたゲームタイプが正しくありません。");
             sender.sendMessage(PREINFO + "指定可能なゲームタイプ : ");
-            sender.sendMessage(PREINFO + "duel_death_match, duel_time_match, team_death_match, team_time_match");
+            sender.sendMessage(PREINFO + "practice, duel_death_match, duel_time_match, team_death_match, team_time_match");
             return true;
         }
 
