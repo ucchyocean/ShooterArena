@@ -18,14 +18,12 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.ShooterArena;
-import com.github.ucchyocean.sa.Utility;
+import com.github.ucchyocean.sa.game.GameSession;
 import com.github.ucchyocean.sa.game.GameType;
 import com.github.ucchyocean.sa.game.MatchMode;
-import com.github.ucchyocean.sa.game.GameSession;
 
 /**
  * @author ucchy
@@ -56,7 +54,12 @@ public class ArenaManager {
 
         // loungeRespawn の保存
         if ( loungeRespawn != null ) {
-            conf.set("lounge.respawn", Utility.convLocationToDesc(loungeRespawn));
+            conf.set("lounge.respawn.world", loungeRespawn.getWorld().getName());
+            conf.set("lounge.respawn.x", loungeRespawn.getBlockX());
+            conf.set("lounge.respawn.y", loungeRespawn.getBlockY());
+            conf.set("lounge.respawn.z", loungeRespawn.getBlockZ());
+            conf.set("lounge.respawn.yaw", loungeRespawn.getYaw());
+            conf.set("lounge.respawn.pitch", loungeRespawn.getPitch());
         }
 
         // Arena の保存
@@ -81,28 +84,34 @@ public class ArenaManager {
 
             Location redRespawn = arena.getRedRespawn();
             if ( redRespawn != null ) {
-                conf.set("arenas." + name + ".red.respawn",
-                        Utility.convLocationToDesc(redRespawn));
-            }
-
-            Vector redVector = arena.getRedVector();
-            if ( redVector != null ) {
-                conf.set("arenas." + name + ".red.catapult.x", redVector.getX());
-                conf.set("arenas." + name + ".red.catapult.y", redVector.getY());
-                conf.set("arenas." + name + ".red.catapult.z", redVector.getZ());
+                conf.set("arenas." + name + ".redrespawn.world",
+                        redRespawn.getWorld().getName());
+                conf.set("arenas." + name + ".redrespawn.x",
+                        redRespawn.getBlockX());
+                conf.set("arenas." + name + ".redrespawn.y",
+                        redRespawn.getBlockY());
+                conf.set("arenas." + name + ".redrespawn.z",
+                        redRespawn.getBlockZ());
+                conf.set("arenas." + name + ".redrespawn.yaw",
+                        redRespawn.getYaw());
+                conf.set("arenas." + name + ".redrespawn.pitch",
+                        redRespawn.getPitch());
             }
 
             Location blueRespawn = arena.getBlueRespawn();
             if ( blueRespawn != null ) {
-                conf.set("arenas." + name + ".blue.respawn",
-                        Utility.convLocationToDesc(blueRespawn));
-            }
-
-            Vector blueVector = arena.getBlueVector();
-            if ( blueVector != null ) {
-                conf.set("arenas." + name + ".blue.catapult.x", blueVector.getX());
-                conf.set("arenas." + name + ".blue.catapult.y", blueVector.getY());
-                conf.set("arenas." + name + ".blue.catapult.z", blueVector.getZ());
+                conf.set("arenas." + name + ".bluerespawn.world",
+                        blueRespawn.getWorld().getName());
+                conf.set("arenas." + name + ".bluerespawn.x",
+                        blueRespawn.getBlockX());
+                conf.set("arenas." + name + ".bluerespawn.y",
+                        blueRespawn.getBlockY());
+                conf.set("arenas." + name + ".bluerespawn.z",
+                        blueRespawn.getBlockZ());
+                conf.set("arenas." + name + ".bluerespawn.yaw",
+                        blueRespawn.getYaw());
+                conf.set("arenas." + name + ".bluerespawn.pitch",
+                        blueRespawn.getPitch());
             }
         }
 
@@ -135,7 +144,8 @@ public class ArenaManager {
 
         // loungeRespawn の復帰
         if ( conf.contains("lounge.respawn") ) {
-            loungeRespawn = Utility.convDescToLocation(conf.getString("lounge.respawn"));
+            loungeRespawn = convSectionToLocation(
+                    conf.getConfigurationSection("lounge.respawn"));
         }
 
         // Arena の復帰
@@ -169,22 +179,18 @@ public class ArenaManager {
             }
 
             if ( section.contains("red") ) {
-                Location location =
-                        Utility.convDescToLocation(section.getString("red.respawn"));
+                Location location = convSectionToLocation(
+                        section.getConfigurationSection("red.respawn"));
                 arena.setRedRespawn(location);
-                Vector catapult =
-                        convSectionToVector(section.getConfigurationSection("red.catapult"));
-                arena.setRedVector(catapult);
             }
 
             if ( section.contains("blue") ) {
-                Location location =
-                        Utility.convDescToLocation(section.getString("blue.respawn"));
+                Location location = convSectionToLocation(
+                        section.getConfigurationSection("blue.respawn"));
                 arena.setBlueRespawn(location);
-                Vector catapult =
-                        convSectionToVector(section.getConfigurationSection("blue.catapult"));
-                arena.setBlueVector(catapult);
             }
+
+            arenas.put(name, arena);
         }
     }
 
@@ -414,7 +420,6 @@ public class ArenaManager {
      */
     public static void setRedRespawn(Arena arena, Location location) {
         arena.setRedRespawn(location);
-        arena.setRedVector(location.getDirection().normalize());
         save();
     }
 
@@ -425,19 +430,23 @@ public class ArenaManager {
      */
     public static void setBlueRespawn(Arena arena, Location location) {
         arena.setBlueRespawn(location);
-        arena.setBlueVector(location.getDirection().normalize());
         save();
     }
 
     /**
-     * x, y, z の Doubleのノードをもった ConfigurationSection を、Vectorに変換して返す
+     * x, y, z, yaw, pitch のノードをもった ConfigurationSection を、Locationに変換して返す
      * @param section セクション
      * @return ベクトル
      */
-    private static Vector convSectionToVector(ConfigurationSection section) {
-        double x = section.getDouble("x", 0);
-        double y = section.getDouble("y", 0);
-        double z = section.getDouble("z", 0);
-        return new Vector(x, y, z);
+    private static Location convSectionToLocation(ConfigurationSection section) {
+        String world_temp = section.getString("world", "world");
+        World world = ShooterArena.getWorld(world_temp);
+        double x = section.getInt("x", 0) + 0.5;
+        double y = section.getInt("y", 64);
+        double z = section.getInt("z", 0) + 0.5;
+        float yaw = (float)section.getDouble("yaw", 0);
+        float pitch = (float)section.getDouble("pitch", 0);
+
+        return new Location(world, x, y, z, yaw, pitch);
     }
 }

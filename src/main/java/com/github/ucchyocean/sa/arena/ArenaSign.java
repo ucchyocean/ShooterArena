@@ -7,6 +7,7 @@ package com.github.ucchyocean.sa.arena;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -15,8 +16,8 @@ import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.Utility;
 import com.github.ucchyocean.sa.command.SetGameCommand;
 import com.github.ucchyocean.sa.game.GamePhase;
-import com.github.ucchyocean.sa.game.MatchMode;
 import com.github.ucchyocean.sa.game.GameSession;
+import com.github.ucchyocean.sa.game.MatchMode;
 /**
  * @author ucchy
  * ラウンジの、対戦募集用サイン
@@ -203,7 +204,7 @@ public class ArenaSign {
     protected String toLocationDesc() {
 
         Location location = sign.getLocation();
-        return Utility.convLocationToDesc(location);
+        return convLocationToDesc(location);
     }
 
     /**
@@ -214,7 +215,7 @@ public class ArenaSign {
      */
     protected static ArenaSign fromLocationDesc(Arena arena, String desc) {
 
-        Location location = Utility.convDescToLocation(desc);
+        Location location = convDescToLocation(desc);
         if ( location == null ) {
             return null;
         }
@@ -263,5 +264,46 @@ public class ArenaSign {
         }
 
         setPrepare();
+    }
+
+    /**
+     * Location を文字列表現に変換して返す
+     * @param location 変換対象
+     * @return 文字列表現
+     */
+    private static String convLocationToDesc(Location location) {
+
+        return String.format("%s_%d_%d_%d",
+                location.getWorld().getName(), location.getBlockX(),
+                location.getBlockY(), location.getBlockZ());
+    }
+
+    /**
+     * 文字列表現をLocationに変換して返す
+     * @param desc 文字列表現
+     * @return 生成されたLocation
+     */
+    private static Location convDescToLocation(String desc) {
+
+        String[] args = desc.split("_");
+        if ( args.length >= 4 ) {
+            return null;
+        }
+
+        World world = ShooterArena.getWorld(args[0]);
+        if ( world == null ) {
+            return null;
+        }
+
+        if ( !Utility.tryIntParse(args[1]) ||
+                !Utility.tryIntParse(args[2]) ||
+                !Utility.tryIntParse(args[3]) ) {
+            return null;
+        }
+        double x = Integer.parseInt(args[1]) + 0.5;
+        double y = Integer.parseInt(args[2]);
+        double z = Integer.parseInt(args[3]) + 0.5;
+
+        return new Location(world, x, y, z);
     }
 }

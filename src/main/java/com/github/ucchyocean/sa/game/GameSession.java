@@ -135,7 +135,7 @@ public class GameSession {
         setPlayerKits();
 
         // タイマーを生成してスタート
-        timer = new GameTimer(this, 5, mode.minute);
+        timer = new GameTimer(this, 5, mode.minute * 60);
         ShooterArena.startGameTimer(timer);
     }
 
@@ -351,10 +351,6 @@ public class GameSession {
 
         // 赤チームリスポーンにテレポート
         Location location = ArenaManager.getArena(arena).getRedRespawn();
-        Vector direction = ArenaManager.getArena(arena).getRedVector();
-        // TODO: テレポート後のプレイヤーの向きを設定する
-        // location.setPitch();
-        // location.setYaw();
         player.teleport(location, TeleportCause.PLUGIN);
     }
 

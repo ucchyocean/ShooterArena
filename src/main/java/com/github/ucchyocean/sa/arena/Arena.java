@@ -22,9 +22,7 @@ public class Arena {
     private MatchMode mode;
 
     private Location redTeamRespawn;
-    private Vector redTeamCatapultVector;
     private Location blueTeamRespawn;
-    private Vector blueTeamCatapultVector;
 
     /**
      * コンストラクタ
@@ -98,13 +96,13 @@ public class Arena {
         this.redTeamRespawn = Utility.toCenterOfBlock(location);
     }
 
-    /**
-     * 赤チームのカタパルト打ち出し用ベクトルを設定します。
-     * @param vector
-     */
-    protected void setRedVector(Vector vector) {
-        this.redTeamCatapultVector = vector;
-    }
+//    /**
+//     * 赤チームのカタパルト打ち出し用ベクトルを設定します。
+//     * @param vector
+//     */
+//    protected void setRedVector(Vector vector) {
+//        this.redTeamCatapultVector = vector;
+//    }
 
     /**
      * 赤チームのリスポーンポイントを取得します。
@@ -119,7 +117,8 @@ public class Arena {
      * @return
      */
     public Vector getRedVector() {
-        return redTeamCatapultVector;
+        //return redTeamCatapultVector;
+        return getRedRespawn().getDirection();
     }
 
     /**
@@ -130,13 +129,13 @@ public class Arena {
         this.blueTeamRespawn = Utility.toCenterOfBlock(location);
     }
 
-    /**
-     * 青チームのカタパルト打ち出し用ベクトルを設定します。
-     * @param vector
-     */
-    protected void setBlueVector(Vector vector) {
-        this.blueTeamCatapultVector = vector;
-    }
+//    /**
+//     * 青チームのカタパルト打ち出し用ベクトルを設定します。
+//     * @param vector
+//     */
+//    protected void setBlueVector(Vector vector) {
+//        this.blueTeamCatapultVector = vector;
+//    }
 
     /**
      * 青チームのリスポーンポイントを取得します。
@@ -151,6 +150,7 @@ public class Arena {
      * @return
      */
     public Vector getBlueVector() {
-        return blueTeamCatapultVector;
+        //return blueTeamCatapultVector;
+        return getBlueRespawn().getDirection();
     }
 }
