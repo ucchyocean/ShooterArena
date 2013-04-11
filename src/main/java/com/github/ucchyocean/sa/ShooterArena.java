@@ -40,7 +40,7 @@ public class ShooterArena extends JavaPlugin {
     public static KitHandler khandler;
     public static TeamHandler thandler;
 
-    public static ArrayList<Player> freezePlayers;
+    public static ArrayList<String> freezePlayers;
     public static Hashtable<String, ICustomItem> customItems;
 
     /**
@@ -82,7 +82,7 @@ public class ShooterArena extends JavaPlugin {
         // その他初期化
         khandler = new KitHandler(getLogger());
         thandler = new TeamHandler(this.getServer().getScoreboardManager().getMainScoreboard());
-        freezePlayers = new ArrayList<Player>();
+        freezePlayers = new ArrayList<String>();
     }
 
     /**

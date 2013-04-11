@@ -79,6 +79,8 @@ public class SetGameCommand extends CommandAbst {
         amount = Integer.parseInt(args[3]);
         MatchMode mode = new MatchMode(type, amount);
         arena.setMode(mode);
+        arena.refreshSign();
+        ArenaManager.save();
 
         sender.sendMessage(PREINFO + "アリーナ" + name + "に、ゲームモード\"" +
                 mode.toJapanese() + "\"を設定しました。");

@@ -29,6 +29,6 @@ public class PlayerRespawnListener implements Listener {
         }
 
         event.setRespawnLocation(location);
-        player.setVelocity(location.getDirection()); // TODO:
+        player.setVelocity(location.getDirection());
     }
 }

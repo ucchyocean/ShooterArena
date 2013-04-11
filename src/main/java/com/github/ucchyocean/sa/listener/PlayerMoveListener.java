@@ -27,7 +27,7 @@ public class PlayerMoveListener implements Listener {
 
         Player player = event.getPlayer();
 
-        if ( ShooterArena.freezePlayers.contains(player) ) {
+        if ( ShooterArena.freezePlayers.contains(player.getName()) ) {
             event.setCancelled(true);
         }
     }

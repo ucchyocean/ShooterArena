@@ -166,18 +166,6 @@ public class ArenaManager {
 
             ConfigurationSection section = arenaSection.getConfigurationSection(name);
 
-            if ( section.contains("mode") ) {
-                GameType type = GameType.fromString(section.getString("mode.type"));
-                int life = section.getInt("mode.life", -1);
-                int minute = section.getInt("mode,minute", -1);
-                MatchMode mode = new MatchMode(type, life, minute);
-                arena.setMode(mode);
-            }
-
-            if ( section.contains("sign") ) {
-                ArenaSign.fromLocationDesc(arena, section.getString("sign"));
-            }
-
             if ( section.contains("red") ) {
                 Location location = convSectionToLocation(
                         section.getConfigurationSection("red.respawn"));
@@ -188,6 +176,19 @@ public class ArenaManager {
                 Location location = convSectionToLocation(
                         section.getConfigurationSection("blue.respawn"));
                 arena.setBlueRespawn(location);
+            }
+
+            if ( section.contains("mode") ) {
+                GameType type = GameType.fromString(section.getString("mode.type"));
+                int life = section.getInt("mode.life", -1);
+                int minute = section.getInt("mode,minute", -1);
+                MatchMode mode = new MatchMode(type, life, minute);
+                arena.setMode(mode);
+            }
+
+            if ( section.contains("sign") ) {
+                ArenaSign.fromLocationDesc(arena, section.getString("sign"));
+                arena.refreshSign();
             }
 
             arenas.put(name, arena);

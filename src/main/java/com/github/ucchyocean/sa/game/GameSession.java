@@ -599,16 +599,14 @@ public class GameSession {
 
         if ( freeze ) {
             for ( String name : players ) {
-                Player player = ShooterArena.getPlayerExact(name);
-                if ( player != null && !ShooterArena.freezePlayers.contains(player) ) {
-                    ShooterArena.freezePlayers.add(player);
+                if ( !ShooterArena.freezePlayers.contains(name) ) {
+                    ShooterArena.freezePlayers.add(name);
                 }
             }
         } else {
             for ( String name : players ) {
-                Player player = ShooterArena.getPlayerExact(name);
-                if ( player != null && ShooterArena.freezePlayers.contains(player) ) {
-                    ShooterArena.freezePlayers.remove(player);
+                if ( ShooterArena.freezePlayers.contains(name) ) {
+                    ShooterArena.freezePlayers.remove(name);
                 }
             }
         }
