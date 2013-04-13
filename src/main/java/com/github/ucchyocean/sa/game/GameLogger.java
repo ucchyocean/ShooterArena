@@ -7,8 +7,9 @@ package com.github.ucchyocean.sa.game;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -31,7 +32,7 @@ public class GameLogger {
      */
     public GameLogger(String gameName) {
 
-        file = new File(
+        file = new File(folder,
                 String.format(FILE_NAME_FORMAT,
                         gameName, formatForFileName.format(new Date())));
     }
@@ -47,7 +48,9 @@ public class GameLogger {
         BufferedWriter writer = null;
 
         try {
-            writer = new BufferedWriter(new FileWriter(file));
+            writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                    new FileOutputStream(file, true)));
             writer.write(date + ", " + message);
             writer.newLine();
         } catch (IOException e) {

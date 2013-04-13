@@ -17,6 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
 import com.github.ucchyocean.sa.ChatMode;
+import com.github.ucchyocean.sa.PlayerExpHandler;
 import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.Utility;
@@ -65,6 +66,9 @@ public class GameSession {
     /** ゲームタイマー */
     private GameTimer timer;
 
+    /** ゲームスコア */
+    private GameScore score;
+
     /**
      * コンストラクタ
      */
@@ -75,6 +79,9 @@ public class GameSession {
         this.mode = arena.getMode();
         this.logger = new GameLogger(arena.getName());
         this.arena = arena.getName();
+        this.score = new GameScore(mode.life);
+        teamRedNames = new ArrayList<String>();
+        teamBlueNames = new ArrayList<String>();
 
         runPreparePhase();
     }
@@ -132,7 +139,10 @@ public class GameSession {
         setFreeze(true);
 
         // アイテムを支給
-        setPlayerKits();
+        setAllPlayerKits();
+
+        // 経験値を配布
+        setAllPlayerExperience();
 
         // タイマーを生成してスタート
         timer = new GameTimer(this, 5, mode.minute * 60);
@@ -153,12 +163,12 @@ public class GameSession {
 
         // タイマーをキャンセルする
         if ( timer != null ) {
-            timer.cancel();
+            ShooterArena.cancelGameTimer(timer);
             timer = null;
         }
 
         // アイテムをクリア
-        clearPlayerInventory();
+        clearAllPlayerInventory();
 
         // プレイヤーをアンフリーズ
         setFreeze(false);
@@ -195,7 +205,7 @@ public class GameSession {
         refreshArenaSign();
 
         // アイテムをクリア
-        clearPlayerInventory();
+        clearAllPlayerInventory();
 
         // プレイヤーをアンフリーズ(念のため)
         setFreeze(false);
@@ -240,13 +250,14 @@ public class GameSession {
     public void addPlayer(String playerName) {
         annouceToAll(playerName + " さんが、ゲームセッションに参加しました。");
         players.add(playerName);
-        refreshArenaSign();
 
         // 満員になったら、開始コマンドを実行するよう、メッセージを送信する
         if ( isFull() ) {
             annouceToAll("ゲーム開始できる人数が集まりました。");
             annouceToAll("誰かが、/shooter start を実行してゲームを開始してください。");
         }
+
+        refreshArenaSign();
     }
 
     /**
@@ -256,6 +267,45 @@ public class GameSession {
     public void removePlayer(String playerName) {
         annouceToAll(playerName + " さんが、ゲームセッションから離脱しました。");
         players.remove(playerName);
+        clearPlayerInventory(playerName);
+        setFreeze(false);
+        teleportToLounge(playerName);
+
+        if ( teamRedNames.contains(playerName) )
+            teamRedNames.remove(playerName);
+        if ( teamBlueNames.contains(playerName) )
+            teamBlueNames.remove(playerName);
+
+        // 誰もいなくなったら、一旦セッションを終了する
+        if ( players.size() <= 0 ) {
+            cancelGame();
+        }
+
+        refreshArenaSign();
+    }
+
+    /**
+     * 指定したプレイヤーがライフを使い切って終了した場合に呼ばれるメソッド
+     * @param playerName ライフを使い切ったプレイヤー名
+     */
+    public void deadPlayer(String playerName) {
+        annouceToAll(playerName + " さんが、ライフを使い切って死亡しました。");
+        players.remove(playerName);
+        clearPlayerInventory(playerName);
+        setFreeze(false);
+
+        if ( teamRedNames.contains(playerName) )
+            teamRedNames.remove(playerName);
+        if ( teamBlueNames.contains(playerName) )
+            teamBlueNames.remove(playerName);
+
+        // 誰もいなくなったらゲームを終了する。そうでなければ観客に追加する
+        if ( players.size() <= 0 ) {
+            endGame();
+        } else {
+            addListener(playerName);
+        }
+
         refreshArenaSign();
     }
 
@@ -273,6 +323,8 @@ public class GameSession {
      */
     public void addListener(String listenerName) {
         listeners.add(listenerName);
+
+        // TODO 既にゲーム中なら、テレポして、flyして、インビジブルする
     }
 
     /**
@@ -359,18 +411,24 @@ public class GameSession {
      */
     public void teleportAllToLounge() {
 
-        Location location = ArenaManager.getLoungeRespawn();
-        for ( String name : teamRedNames ) {
-            Player player = ShooterArena.getPlayerExact(name);
-            if ( player != null ) {
-                player.teleport(location, TeleportCause.PLUGIN);
-            }
+        for ( String name : players ) {
+            teleportToLounge(name);
         }
         for ( String name : listeners ) {
-            Player player = ShooterArena.getPlayerExact(name);
-            if ( player != null ) {
-                player.teleport(location, TeleportCause.PLUGIN);
-            }
+            teleportToLounge(name);
+        }
+    }
+
+    /**
+     * 指定したプレイヤーをラウンジにテレポートする
+     * @param name プレイヤー名
+     */
+    private void teleportToLounge(String name) {
+
+        Location location = ArenaManager.getLoungeRespawn();
+        Player player = ShooterArena.getPlayerExact(name);
+        if ( player != null ) {
+            player.teleport(location, TeleportCause.PLUGIN);
         }
     }
 
@@ -439,49 +497,66 @@ public class GameSession {
     }
 
     /**
-     * プレイヤーのインベントリをキットで初期化する
+     * 全てのプレイヤーのインベントリをキットで初期化する
      */
-    private void setPlayerKits() {
-
-        ArrayList<ItemStack> items = SAConfig.getKitsItems();
-        ArrayList<ItemStack> armors = SAConfig.getKitsArmors();
+    private void setAllPlayerKits() {
 
         for ( String name : players ) {
             Player player = ShooterArena.getPlayerExact(name);
             if ( player != null ) {
-                PlayerInventory inv = player.getInventory();
-
-                inv.clear();
-                inv.setHelmet(null);
-                inv.setChestplate(null);
-                inv.setLeggings(null);
-                inv.setBoots(null);
-
-                for ( ItemStack item : items ) {
-                    inv.addItem(item);
-                }
-                inv.setHelmet(armors.get(0));
-                inv.setChestplate(armors.get(1));
-                inv.setLeggings(armors.get(2));
-                inv.setBoots(armors.get(3));
+                setPlayerKits(player);
             }
         }
     }
 
     /**
+     * プレイヤーのインベントリをキットで初期化する
+     * @param player プレイヤー
+     */
+    public void setPlayerKits(Player player) {
+
+        ArrayList<ItemStack> items = SAConfig.getKitsItems();
+        ArrayList<ItemStack> armors = SAConfig.getKitsArmors();
+
+        PlayerInventory inv = player.getInventory();
+
+        inv.clear();
+        inv.setHelmet(null);
+        inv.setChestplate(null);
+        inv.setLeggings(null);
+        inv.setBoots(null);
+
+        for ( ItemStack item : items ) {
+            inv.addItem(item);
+        }
+        inv.setHelmet(armors.get(0));
+        inv.setChestplate(armors.get(1));
+        inv.setLeggings(armors.get(2));
+        inv.setBoots(armors.get(3));
+    }
+
+    /**
      * 全てのプレイヤーのインベントリをクリアする
      */
-    private void clearPlayerInventory() {
+    private void clearAllPlayerInventory() {
 
         for ( String name : players ) {
-            Player player = ShooterArena.getPlayerExact(name);
-            if ( player != null ) {
-                player.getInventory().clear();
-                player.getInventory().setHelmet(null);
-                player.getInventory().setChestplate(null);
-                player.getInventory().setLeggings(null);
-                player.getInventory().setBoots(null);
-            }
+            clearPlayerInventory(name);
+        }
+    }
+
+    /**
+     * プレイヤーのインベントリをクリアする
+     * @param name プレイヤー
+     */
+    private void clearPlayerInventory(String name) {
+        Player player = ShooterArena.getPlayerExact(name);
+        if ( player != null ) {
+            player.getInventory().clear();
+            player.getInventory().setHelmet(null);
+            player.getInventory().setChestplate(null);
+            player.getInventory().setLeggings(null);
+            player.getInventory().setBoots(null);
         }
     }
 
@@ -622,6 +697,7 @@ public class GameSession {
         for ( String name : teamRedNames ) {
             Player player = ShooterArena.getPlayerExact(name);
             if ( player != null ) {
+                player.setFallDistance(-1000);
                 player.setVelocity(redv);
             }
         }
@@ -631,6 +707,7 @@ public class GameSession {
         for ( String name : teamBlueNames ) {
             Player player = ShooterArena.getPlayerExact(name);
             if ( player != null ) {
+                player.setFallDistance(-1000);
                 player.setVelocity(redv);
             }
         }
@@ -654,9 +731,15 @@ public class GameSession {
         }
         vec = vec.multiply(SAConfig.catapultPower);
 
+        player.setFallDistance(-1000);
         player.setVelocity(vec);
     }
 
+    /**
+     * 指定したプレイヤーに対応するリスポーン地点を取得する
+     * @param player プレイヤー
+     * @return リスポーン地点
+     */
     public Location getRespawnPointByPlayer(Player player) {
 
         if ( player == null ) {
@@ -670,5 +753,48 @@ public class GameSession {
         }
 
         return null;
+    }
+
+    /**
+     * 全てのプレイヤーの経験値を設定する
+     */
+    public void setAllPlayerExperience() {
+
+        for ( String name : players ) {
+            Player player = ShooterArena.getPlayerExact(name);
+            if ( player != null ) {
+                PlayerExpHandler.setExperience(player, SAConfig.kitsExp);
+            }
+        }
+    }
+
+    /**
+     * ゲームスコアを取得する
+     * @return ゲームスコア
+     */
+    public GameScore getScore() {
+        return score;
+    }
+
+    /**
+     * ゲームスコアを設定する
+     * @param score ゲームスコア
+     */
+    public void setScore(GameScore score) {
+        this.score = score;
+    }
+
+    /**
+     * プレイヤーが所属するチームを返す
+     * @param name プレイヤー名
+     * @return 赤チームなら red、青チームなら blue を返す
+     */
+    public String getPlayerTeam(String name) {
+        if ( teamRedNames.contains(name) )
+            return "red";
+        else if ( teamBlueNames.contains(name) )
+            return "blue";
+        else
+            return "";
     }
 }

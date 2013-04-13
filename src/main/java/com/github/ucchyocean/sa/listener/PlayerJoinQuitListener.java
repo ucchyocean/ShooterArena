@@ -5,8 +5,8 @@
  */
 package com.github.ucchyocean.sa.listener;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @author ucchy
  * プレイヤーのサーバー参加、離脱を監視するクラス
  */
-public class PlayerJoinQuitListener {
+public class PlayerJoinQuitListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -27,8 +27,6 @@ public class PlayerJoinQuitListener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-
-        Player player = event.getPlayer();
 
         // TODO: ゲームセッションから離脱すべきなのかどうかを検討する
 

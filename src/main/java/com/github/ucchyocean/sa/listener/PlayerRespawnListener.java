@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import com.github.ucchyocean.sa.PlayerExpHandler;
+import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
 import com.github.ucchyocean.sa.game.GameSession;
@@ -15,7 +17,8 @@ public class PlayerRespawnListener implements Listener {
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
 
-        // ゲーム中のプレイヤーなら、チームリスポーンポイントへ送り、カタパルトする
+        // ゲーム中のプレイヤーなら、装備と経験値を与え、
+        // チームリスポーンポイントへ送り、カタパルトする
         Player player = event.getPlayer();
 
         GameSession session = ArenaManager.getSessionByPlayer(player);
@@ -28,6 +31,8 @@ public class PlayerRespawnListener implements Listener {
             return;
         }
 
+        session.setPlayerKits(player);
+        PlayerExpHandler.setExperience(player, SAConfig.kitsExp);
         event.setRespawnLocation(location);
         player.setVelocity(location.getDirection());
     }

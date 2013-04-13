@@ -72,7 +72,7 @@ public class ArenaManager {
 
             MatchMode mode = arena.getMode();
             if ( mode != null ) {
-                conf.set("arenas." + name + ".mode.type", mode.type);
+                conf.set("arenas." + name + ".mode.type", mode.type.toString());
                 conf.set("arenas." + name + ".mode.life", mode.life);
                 conf.set("arenas." + name + ".mode.minute", mode.minute);
             }
@@ -166,29 +166,32 @@ public class ArenaManager {
 
             ConfigurationSection section = arenaSection.getConfigurationSection(name);
 
-            if ( section.contains("red") ) {
+            if ( section.contains("redrespawn") ) {
                 Location location = convSectionToLocation(
-                        section.getConfigurationSection("red.respawn"));
+                        section.getConfigurationSection("redrespawn"));
                 arena.setRedRespawn(location);
             }
 
-            if ( section.contains("blue") ) {
+            if ( section.contains("bluerespawn") ) {
                 Location location = convSectionToLocation(
-                        section.getConfigurationSection("blue.respawn"));
+                        section.getConfigurationSection("bluerespawn"));
                 arena.setBlueRespawn(location);
             }
 
             if ( section.contains("mode") ) {
                 GameType type = GameType.fromString(section.getString("mode.type"));
                 int life = section.getInt("mode.life", -1);
-                int minute = section.getInt("mode,minute", -1);
+                int minute = section.getInt("mode.minute", -1);
                 MatchMode mode = new MatchMode(type, life, minute);
                 arena.setMode(mode);
             }
 
             if ( section.contains("sign") ) {
-                ArenaSign.fromLocationDesc(arena, section.getString("sign"));
-                arena.refreshSign();
+                ArenaSign sign =
+                        ArenaSign.fromLocationDesc(arena, section.getString("sign"));
+                if ( sign != null ) {
+                    arena.refreshSign();
+                }
             }
 
             arenas.put(name, arena);
@@ -290,12 +293,25 @@ public class ArenaManager {
         Enumeration<String> keys = arenas.keys();
         while ( keys.hasMoreElements() ) {
             String key = keys.nextElement();
-            if ( sessions.containsKey(key) ) {
-                result.add(key + " - 空き");
+            Arena arena = arenas.get(key);
+
+            String modeDisplay;
+            if ( arena.getMode() == null ) {
+                modeDisplay = "未設定";
+            } else {
+                modeDisplay = arena.getMode().toJapanese();
+            }
+
+            String phaseDisplay;
+            if ( sessions.containsKey(key) || sessions.get(key) == null ) {
+                phaseDisplay = "空き";
             } else {
                 GameSession session = sessions.get(key);
-                result.add(key + " - " + session.phase.toJapanese());
+                phaseDisplay = session.phase.toJapanese();
             }
+
+            result.add(String.format("%s(%s) - %s",
+                    key, modeDisplay, phaseDisplay));
         }
 
         return result;

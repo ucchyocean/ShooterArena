@@ -5,35 +5,39 @@
  */
 package com.github.ucchyocean.sa.game;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class GameScore {
 
-    Hashtable<String, Integer> playerScores;
-    int redTeamScore;
-    int blueTeamScore;
+    public Hashtable<String, int[]> playerKillDeath;
+    public int redTeamScore;
+    public int blueTeamScore;
+    private int life;
 
-    public GameScore(ArrayList<String> playerNames) {
-        playerScores = new Hashtable<String, Integer>();
-        for ( String name : playerNames ) {
-            playerScores.put(name, 0);
-        }
+    public GameScore(int life) {
+        this.life = life;
+        playerKillDeath = new Hashtable<String, int[]>();
     }
 
-    public void incrementPlayerScore(String name) {
-        if ( playerScores.contains(name) ) {
-            playerScores.put(name, playerScores.get(name) + 1);
+    public void addPlayerScore(String name, int kill, int death) {
+        if ( playerKillDeath.contains(name) ) {
+            int[] data = playerKillDeath.get(name);
+            data[0] += kill;
+            data[1] += death;
+            playerKillDeath.put(name, data);
         } else {
-            playerScores.put(name, 1);
+            int[] data = new int[2];
+            data[0] = kill;
+            data[1] = death;
+            playerKillDeath.put(name, data);
         }
     }
 
-    public void incrementRedScore() {
-        redTeamScore++;
-    }
-
-    public void incrementBlueScore() {
-        blueTeamScore++;
+    public int getPlayerLife(String name) {
+        if ( playerKillDeath.contains(name) ) {
+            return life - playerKillDeath.get(name)[1];
+        } else {
+            return life;
+        }
     }
 }

@@ -28,7 +28,12 @@ public class PlayerMoveListener implements Listener {
         Player player = event.getPlayer();
 
         if ( ShooterArena.freezePlayers.contains(player.getName()) ) {
-            event.setCancelled(true);
+
+            if ( event.getFrom().getX() != event.getTo().getX() ||
+                    event.getFrom().getY() != event.getTo().getY() ||
+                    event.getFrom().getZ() != event.getTo().getZ() ) {
+                event.setCancelled(true);
+            }
         }
     }
 }

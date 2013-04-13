@@ -32,16 +32,16 @@ public class ArenaSign {
     };
 
     private static final String[] MESSAGE_MATCHING = {
-        ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC +
+        ChatColor.DARK_RED + "" + ChatColor.ITALIC +
             "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_PURPLE + "対戦メンバー募集中" + ChatColor.RESET,
-        ChatColor.DARK_PURPLE + "<左クリックで参加>" + ChatColor.RESET,
+        ChatColor.DARK_RED + "対戦メンバー募集中" + ChatColor.RESET,
+        ChatColor.DARK_RED + "<左クリックで参加>" + ChatColor.RESET,
     };
 
     private static final String[] MESSAGE_MATCHING_FULL = {
-        ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC +
+        ChatColor.DARK_RED + "" + ChatColor.ITALIC +
             "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_PURPLE + "対戦準備中" + ChatColor.RESET,
+        ChatColor.DARK_RED + "対戦準備中" + ChatColor.RESET,
         ChatColor.DARK_RED + "<満員>" + ChatColor.RESET,
     };
 
@@ -80,7 +80,19 @@ public class ArenaSign {
      * @return このオブジェクトのカンバンかどうか
      */
     public boolean equalsSign(Sign sign) {
-        return sign.equals(sign);
+        if ( this.sign == null || sign == null ) {
+            return false;
+        }
+        if ( this.sign.getX() != sign.getX() ) {
+            return false;
+        }
+        if ( this.sign.getY() != sign.getY() ) {
+            return false;
+        }
+        if ( this.sign.getZ() != sign.getZ() ) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -175,13 +187,29 @@ public class ArenaSign {
             } else {
                 // 新規ゲームセッションの作成
                 ArenaManager.createNewGameSession(parent, player);
+                parent.refreshSign();
                 return;
             }
 
         } else {
             // アリーナのゲームセッションに参加する場合
 
+            GameSession session = ArenaManager.getSession(parent.getName());
 
+            if ( session.phase == GamePhase.IN_GAME ) {
+                player.sendMessage(ShooterArena.PREERR +
+                        "このアリーナは既にゲーム中で参加できません。");
+                return;
+            }
+
+            if ( session.isFull() ) {
+                player.sendMessage(ShooterArena.PREERR +
+                        "このアリーナは満員です。");
+                return;
+            }
+
+            session.addPlayer(player.getName());
+            parent.refreshSign();
         }
     }
 
@@ -285,8 +313,8 @@ public class ArenaSign {
      */
     private static Location convDescToLocation(String desc) {
 
-        String[] args = desc.split("_");
-        if ( args.length >= 4 ) {
+        String[] args = desc.split("[_]");
+        if ( args.length < 3 ) {
             return null;
         }
 
