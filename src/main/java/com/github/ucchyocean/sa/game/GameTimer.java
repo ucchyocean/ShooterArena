@@ -34,10 +34,6 @@ public class GameTimer {
      */
     public void onTick() {
 
-        // デバッグ
-        System.out.println(String.format("id: %d, ready: %d, game: %d",
-                this.hashCode(), secondsReadyLeast, secondsGameLeast));
-
         if ( secondsReadyLeast > 0 ) {
             secondsReadyLeast--;
 

@@ -325,6 +325,7 @@ public class ArenaManager {
     public static GameSession createNewGameSession(Arena arena, Player leader) {
         GameSession session = new GameSession(arena);
         session.addPlayer(leader.getName());
+        session.runMatchMakingPhase();
         sessions.put(arena.getName(), session);
         return session;
     }

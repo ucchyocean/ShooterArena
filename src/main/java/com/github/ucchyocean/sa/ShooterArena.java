@@ -8,7 +8,6 @@ package com.github.ucchyocean.sa;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -26,6 +25,7 @@ import com.github.ucchyocean.sa.listener.CustomItemUseListener;
 import com.github.ucchyocean.sa.listener.EntityDamageListener;
 import com.github.ucchyocean.sa.listener.LoungeSignListener;
 import com.github.ucchyocean.sa.listener.PlayerChatListener;
+import com.github.ucchyocean.sa.listener.PlayerDeathListener;
 import com.github.ucchyocean.sa.listener.PlayerJoinQuitListener;
 import com.github.ucchyocean.sa.listener.PlayerMoveListener;
 import com.github.ucchyocean.sa.listener.PlayerRespawnListener;
@@ -49,7 +49,7 @@ public class ShooterArena extends JavaPlugin {
     public static ArrayList<String> freezePlayers;
     public static Hashtable<String, ICustomItem> customItems;
 
-    protected static Vector<GameTimer> timers;
+    private ArrayList<GameTimer> timers;
 
     /**
      * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
@@ -87,13 +87,14 @@ public class ShooterArena extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerRespawnListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
 
         // コマンドの登録
         getCommand("ShooterArena").setExecutor(new ShooterArenaCommand());
         getCommand("Shooter").setExecutor(new ShooterCommand());
 
         // スケジューラーの登録
-        timers = new Vector<GameTimer>();
+        timers = new ArrayList<GameTimer>();
         getServer().getScheduler().scheduleSyncRepeatingTask(
                 instance, new TimerBase(), 20, 20);
 
@@ -188,7 +189,7 @@ public class ShooterArena extends JavaPlugin {
      * @param timer
      */
     public static void startGameTimer(GameTimer timer) {
-        timers.add(timer);
+        instance.timers.add(timer);
     }
 
     /**
@@ -196,7 +197,20 @@ public class ShooterArena extends JavaPlugin {
      * @param timer
      */
     public static void cancelGameTimer(GameTimer timer) {
-        if ( timers.contains(timer) )
-            timers.remove(timer);
+        if ( instance.timers.contains(timer) )
+            instance.timers.remove(timer);
+    }
+
+    /**
+     * このメソッドは、1秒（20ticks）に1回呼び出される。
+     */
+    protected static void onEachSeconds() {
+
+        // 登録されているタイマーの処理を行う
+        for ( GameTimer timer : instance.timers ) {
+            if ( timer != null ) {
+                timer.onTick();
+            }
+        }
     }
 }

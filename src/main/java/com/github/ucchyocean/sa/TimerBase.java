@@ -7,8 +7,6 @@ package com.github.ucchyocean.sa;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.ucchyocean.sa.game.GameTimer;
-
 /**
  * @author ucchy
  * タイマーのベースとなるクラス
@@ -20,13 +18,7 @@ public class TimerBase extends BukkitRunnable {
      * @see java.lang.Runnable#run()
      */
     public void run() {
-
-        // 登録されているタイマーの処理を行う
-        for ( GameTimer timer : ShooterArena.timers ) {
-            if ( timer != null ) {
-                timer.onTick();
-            }
-        }
+        ShooterArena.onEachSeconds();
     }
 
 }

@@ -95,9 +95,6 @@ public class GameSession {
 
         String message = "アリーナ " + arena + " で、新規ゲームセッションが作成されました。";
         annouceToAll(message);
-
-        // そのまま募集中フェーズへ移行する
-        runMatchMakingPhase();
    }
 
     /**

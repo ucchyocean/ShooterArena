@@ -6,8 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import com.github.ucchyocean.sa.PlayerExpHandler;
-import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
 import com.github.ucchyocean.sa.game.GameSession;
@@ -32,7 +30,6 @@ public class PlayerRespawnListener implements Listener {
         }
 
         session.setPlayerKits(player);
-        PlayerExpHandler.setExperience(player, SAConfig.kitsExp);
         event.setRespawnLocation(location);
         player.setVelocity(location.getDirection());
     }

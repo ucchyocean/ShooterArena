@@ -186,6 +186,8 @@ public class ArenaSign {
 
             } else {
                 // 新規ゲームセッションの作成
+//                player.sendMessage(ShooterArena.PREINFO + "アリーナ " + parent.getName() + " に参加します。");
+//                player.sendMessage(ShooterArena.PREINFO + "取り消す場合は、/shooter leave を実行してください。");
                 ArenaManager.createNewGameSession(parent, player);
                 parent.refreshSign();
                 return;
@@ -208,6 +210,8 @@ public class ArenaSign {
                 return;
             }
 
+            player.sendMessage(ShooterArena.PREINFO + "アリーナ " + parent.getName() + " に参加します。");
+            player.sendMessage(ShooterArena.PREINFO + "取り消す場合は、/shooter leave を実行してください。");
             session.addPlayer(player.getName());
             parent.refreshSign();
         }

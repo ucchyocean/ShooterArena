@@ -20,7 +20,7 @@ public class GameScore {
     }
 
     public void addPlayerScore(String name, int kill, int death) {
-        if ( playerKillDeath.contains(name) ) {
+        if ( playerKillDeath.containsKey(name) ) {
             int[] data = playerKillDeath.get(name);
             data[0] += kill;
             data[1] += death;
@@ -34,7 +34,8 @@ public class GameScore {
     }
 
     public int getPlayerLife(String name) {
-        if ( playerKillDeath.contains(name) ) {
+
+        if ( playerKillDeath.containsKey(name) ) {
             return life - playerKillDeath.get(name)[1];
         } else {
             return life;

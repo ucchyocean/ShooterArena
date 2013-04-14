@@ -16,6 +16,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import com.github.ucchyocean.sa.SAConfig;
+import com.github.ucchyocean.sa.Utility;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GameScore;
 import com.github.ucchyocean.sa.game.GameSession;
@@ -37,10 +39,19 @@ public class PlayerDeathListener implements Listener {
         String name = player.getName();
         GameSession session = ArenaManager.getSessionByPlayer(player);
 
+        // 死亡メッセージを非表示にする
+        event.setDeathMessage("");
+
         // ゲーム中プレイヤーじゃなければ、関係ないので抜ける
         if ( session == null ) {
             return;
         }
+
+        // ドロップアイテムを消去する
+        event.getDrops().clear();
+
+        // 復帰後の経験値をここで設定しておく
+        event.setNewExp(SAConfig.kitsExp);
 
         // スコア取得、デス数加算
         GameScore score = session.getScore();
@@ -63,6 +74,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         if ( killer != null ) {
+
             score.addPlayerScore(killer.getName(), 1, 0);
 
             // チーム得点の加算
@@ -72,14 +84,26 @@ public class PlayerDeathListener implements Listener {
             else if ( team.equals("blue") )
                 score.blueTeamScore++;
 
+            // 死亡メッセージを流す
+            session.annouceToAll(String.format(Utility.replaceColorCode(
+                    "&b%s&eは&b%s&eに倒されました。RED:&b%d&e, BLUE:&b%d&e"),
+                    player.getName(), killer.getName(),
+                    score.redTeamScore, score.blueTeamScore));
+
         } else {
 
-            // 自殺の場合は、チーム得点を減点
+            // 自爆の場合は、チーム得点を減点
             String team = session.getPlayerTeam(name);
             if ( team.equals("red") )
                 score.redTeamScore--;
             else if ( team.equals("blue") )
                 score.blueTeamScore--;
+
+            // 自爆メッセージを流す
+            session.annouceToAll(String.format(Utility.replaceColorCode(
+                    "&b%s&eは自爆しました。RED:&b%d&e, BLUE:&b%d&e"),
+                    player.getName(),
+                    score.redTeamScore, score.blueTeamScore));
         }
 
         // ライフが無くなったかどうかを確認する
