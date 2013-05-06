@@ -25,31 +25,27 @@ import com.github.ucchyocean.sa.game.MatchMode;
 public class ArenaSign {
 
     private static final String[] MESSAGE_PREPARE = {
-        ChatColor.DARK_AQUA + "" + ChatColor.ITALIC +
-            "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_AQUA + "このアリーナは" + ChatColor.RESET,
-        ChatColor.DARK_AQUA + "準備中です。" + ChatColor.RESET,
+        ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + "%s",
+        ChatColor.DARK_AQUA + "このアリーナは",
+        ChatColor.DARK_AQUA + "準備中です。",
     };
 
     private static final String[] MESSAGE_MATCHING = {
-        ChatColor.DARK_RED + "" + ChatColor.ITALIC +
-            "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_RED + "対戦メンバー募集中" + ChatColor.RESET,
-        ChatColor.DARK_RED + "<左クリックで参加>" + ChatColor.RESET,
+        ChatColor.DARK_RED + "" + ChatColor.ITALIC + "%s",
+        ChatColor.DARK_RED + "対戦メンバー募集中",
+        ChatColor.DARK_RED + "<左クリックで参加>",
     };
 
     private static final String[] MESSAGE_MATCHING_FULL = {
-        ChatColor.DARK_RED + "" + ChatColor.ITALIC +
-            "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_RED + "対戦準備中" + ChatColor.RESET,
-        ChatColor.DARK_RED + "<満員>" + ChatColor.RESET,
+        ChatColor.DARK_RED + "" + ChatColor.ITALIC + "%s",
+        ChatColor.DARK_RED + "対戦準備中",
+        ChatColor.DARK_RED + "<満員>",
     };
 
     private static final String[] MESSAGE_IN_GAME = {
-        ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC +
-            "%s" + ChatColor.RESET, // %s = ゲームタイプ
-        ChatColor.DARK_BLUE + "対戦中" + ChatColor.RESET,
-        ChatColor.DARK_BLUE + "" + ChatColor.RESET,
+        ChatColor.DARK_PURPLE + "" + ChatColor.ITALIC + "%s",
+        ChatColor.DARK_PURPLE + "対戦中",
+        "",
     };
 
     private Arena parent;

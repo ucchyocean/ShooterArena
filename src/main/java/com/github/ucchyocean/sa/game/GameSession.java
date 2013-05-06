@@ -291,16 +291,22 @@ public class GameSession {
         clearPlayerInventory(playerName);
         setFreeze(false);
 
-        if ( teamRedNames.contains(playerName) )
+        if ( teamRedNames.contains(playerName) ) {
             teamRedNames.remove(playerName);
-        if ( teamBlueNames.contains(playerName) )
+            // 誰もいなくなったらゲームを終了する。そうでなければ観客に追加する
+            if ( teamRedNames.size() <= 0 ) {
+                endGame();
+            } else {
+                addListener(playerName);
+            }
+        } else if ( teamBlueNames.contains(playerName) ) {
             teamBlueNames.remove(playerName);
-
-        // 誰もいなくなったらゲームを終了する。そうでなければ観客に追加する
-        if ( players.size() <= 0 ) {
-            endGame();
-        } else {
-            addListener(playerName);
+            // 誰もいなくなったらゲームを終了する。そうでなければ観客に追加する
+            if ( teamBlueNames.size() <= 0 ) {
+                endGame();
+            } else {
+                addListener(playerName);
+            }
         }
 
         refreshArenaSign();
@@ -319,9 +325,15 @@ public class GameSession {
      * @param listenerName 観客名
      */
     public void addListener(String listenerName) {
+
         listeners.add(listenerName);
+        Player player = ShooterArena.getPlayerExact(listenerName);
 
         // TODO 既にゲーム中なら、テレポして、flyして、インビジブルする
+//        if ( phase == GamePhase.IN_GAME ) {
+//            teleportToArena(player);
+//            player.setFlying(true);
+//        }
     }
 
     /**

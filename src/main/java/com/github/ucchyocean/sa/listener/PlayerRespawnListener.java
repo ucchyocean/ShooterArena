@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
+import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.arena.ArenaManager;
 import com.github.ucchyocean.sa.game.GamePhase;
 import com.github.ucchyocean.sa.game.GameSession;
@@ -21,16 +22,20 @@ public class PlayerRespawnListener implements Listener {
 
         GameSession session = ArenaManager.getSessionByPlayer(player);
         if ( session == null || session.phase != GamePhase.IN_GAME) {
+            Location lounge = ArenaManager.getLoungeRespawn();
+            event.setRespawnLocation(lounge);
             return;
         }
 
         Location location = session.getRespawnPointByPlayer(player);
         if ( location == null ) {
+            Location lounge = ArenaManager.getLoungeRespawn();
+            event.setRespawnLocation(lounge);
             return;
         }
 
         session.setPlayerKits(player);
         event.setRespawnLocation(location);
-        player.setVelocity(location.getDirection());
+        player.setVelocity(location.getDirection().multiply(SAConfig.catapultPower));
     }
 }

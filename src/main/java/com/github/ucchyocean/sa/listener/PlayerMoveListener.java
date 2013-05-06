@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.util.Vector;
 
 import com.github.ucchyocean.sa.ShooterArena;
 
@@ -33,6 +34,7 @@ public class PlayerMoveListener implements Listener {
                     event.getFrom().getY() != event.getTo().getY() ||
                     event.getFrom().getZ() != event.getTo().getZ() ) {
                 event.setCancelled(true);
+                player.setVelocity(new Vector(0, 0, 0));
             }
         }
     }

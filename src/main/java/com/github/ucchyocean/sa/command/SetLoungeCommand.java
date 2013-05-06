@@ -39,7 +39,7 @@ public class SetLoungeCommand extends CommandAbst {
 
         Player player = (Player)sender;
 
-        if ( !ShooterArena.wghandler.existRegion(player.getWorld(), "lounge") ) {
+        if ( !ShooterArena.wghandler.existRegion("lounge") ) {
             sender.sendMessage(PREERR + "領域loungeが登録されていません。");
             return true;
         }

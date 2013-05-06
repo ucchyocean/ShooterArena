@@ -4,6 +4,7 @@
 package com.github.ucchyocean.sa;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -40,13 +41,18 @@ public class WorldGuardHandler {
 
     /**
      * 指定した領域が存在するかどうかを確認する
-     * @param world ワールド
      * @param name 領域名
      * @return 存在するかどうか
      */
-    public boolean existRegion(World world, String name) {
-        RegionManager manager = wg.getRegionManager(world);
-        return manager.hasRegion(name);
+    public boolean existRegion(String name) {
+        List<World> worlds = ShooterArena.getWorlds();
+        for ( World world : worlds ) {
+            RegionManager manager = wg.getRegionManager(world);
+            if ( manager.hasRegion(name) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

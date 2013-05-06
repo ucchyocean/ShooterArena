@@ -78,7 +78,7 @@ public class PlayerDeathListener implements Listener {
             score.addPlayerScore(killer.getName(), 1, 0);
 
             // チーム得点の加算
-            String team = session.getPlayerTeam(name);
+            String team = session.getPlayerTeam(killer.getName());
             if ( team.equals("red") )
                 score.redTeamScore++;
             else if ( team.equals("blue") )

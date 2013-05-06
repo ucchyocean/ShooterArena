@@ -8,6 +8,7 @@ package com.github.ucchyocean.sa;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -96,7 +97,7 @@ public class ShooterArena extends JavaPlugin {
         // スケジューラーの登録
         timers = new ArrayList<GameTimer>();
         getServer().getScheduler().scheduleSyncRepeatingTask(
-                instance, new TimerBase(), 20, 20);
+                instance, new TimerBase(this), 20, 20);
 
         // その他初期化
         khandler = new KitHandler(getLogger());
@@ -175,6 +176,14 @@ public class ShooterArena extends JavaPlugin {
     public static World getWorld(String name) {
         return instance.getServer().getWorld(name);
     }
+    
+    /**
+     * 全てのワールドを返す。
+     * @return 全てのワールド
+     */
+    public static List<World> getWorlds() {
+        return instance.getServer().getWorlds();
+    }
 
     /**
      * このプラグインのJarファイル自身を示すFileクラスを返す。
@@ -204,10 +213,11 @@ public class ShooterArena extends JavaPlugin {
     /**
      * このメソッドは、1秒（20ticks）に1回呼び出される。
      */
-    protected static void onEachSeconds() {
+    protected void onEachSeconds() {
 
         // 登録されているタイマーの処理を行う
-        for ( GameTimer timer : instance.timers ) {
+        final ArrayList<GameTimer> timers = new ArrayList<GameTimer>(this.timers);
+        for ( GameTimer timer : timers ) {
             if ( timer != null ) {
                 timer.onTick();
             }

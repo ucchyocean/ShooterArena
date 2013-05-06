@@ -52,7 +52,7 @@ public class PlayerExpHandler {
         int total = player.getTotalExperience();
         player.setLevel(0);
         player.setExp(0);
-        for(;total > player.getExpToLevel();) {
+        while ( total > player.getExpToLevel() ) {
             total -= player.getExpToLevel();
             player.setLevel(player.getLevel()+1);
         }

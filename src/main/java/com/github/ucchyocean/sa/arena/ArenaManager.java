@@ -19,7 +19,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.github.ucchyocean.sa.SAConfig;
 import com.github.ucchyocean.sa.ShooterArena;
 import com.github.ucchyocean.sa.game.GameSession;
 import com.github.ucchyocean.sa.game.GameType;
@@ -213,11 +212,7 @@ public class ArenaManager {
      * @return 登録済みかどうか
      */
     public static boolean existArenaRegion(String name) {
-        World world = ShooterArena.getWorld(SAConfig.defaultWorldName);
-        if ( world == null ) {
-            return false;
-        }
-        return ShooterArena.wghandler.existRegion(world, name);
+        return ShooterArena.wghandler.existRegion(name);
     }
 
     /**
