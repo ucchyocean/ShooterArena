@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -329,11 +330,13 @@ public class GameSession {
         listeners.add(listenerName);
         Player player = ShooterArena.getPlayerExact(listenerName);
 
-        // TODO 既にゲーム中なら、テレポして、flyして、インビジブルする
-//        if ( phase == GamePhase.IN_GAME ) {
-//            teleportToArena(player);
-//            player.setFlying(true);
-//        }
+        // 既にゲーム中なら、テレポして、flyして、インビジブルする
+        if ( phase == GamePhase.IN_GAME ) {
+            teleportToArena(player);
+            player.setFlying(true);
+            player.setCanPickupItems(false);
+            player.setGameMode(GameMode.CREATIVE);
+        }
     }
 
     /**

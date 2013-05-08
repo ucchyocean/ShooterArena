@@ -25,11 +25,7 @@ import com.github.ucchyocean.sa.item.Shooter;
 import com.github.ucchyocean.sa.listener.CustomItemUseListener;
 import com.github.ucchyocean.sa.listener.EntityDamageListener;
 import com.github.ucchyocean.sa.listener.LoungeSignListener;
-import com.github.ucchyocean.sa.listener.PlayerChatListener;
-import com.github.ucchyocean.sa.listener.PlayerDeathListener;
-import com.github.ucchyocean.sa.listener.PlayerJoinQuitListener;
-import com.github.ucchyocean.sa.listener.PlayerMoveListener;
-import com.github.ucchyocean.sa.listener.PlayerRespawnListener;
+import com.github.ucchyocean.sa.listener.PlayerListener;
 
 /**
  * @author ucchy
@@ -84,11 +80,7 @@ public class ShooterArena extends JavaPlugin {
         // リスナーの登録
         getServer().getPluginManager().registerEvents(new LoungeSignListener(), this);
         getServer().getPluginManager().registerEvents(new EntityDamageListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerChatListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerRespawnListener(), this);
-        getServer().getPluginManager().registerEvents(new PlayerDeathListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         // コマンドの登録
         getCommand("ShooterArena").setExecutor(new ShooterArenaCommand());
@@ -176,7 +168,7 @@ public class ShooterArena extends JavaPlugin {
     public static World getWorld(String name) {
         return instance.getServer().getWorld(name);
     }
-    
+
     /**
      * 全てのワールドを返す。
      * @return 全てのワールド
